@@ -917,48 +917,75 @@
         /* ===== CALCULATOR ===== */
         .calc-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         .calc-item {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 16px;
+            padding: 20px;
         }
         
         .calc-item-title {
             font-weight: 600;
-            margin-bottom: 12px;
+            font-size: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         
         .calc-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .calc-row:has(input:nth-child(2):last-child) {
+            grid-template-columns: repeat(2, 1fr);
         }
         
         .calc-input {
-            flex: 1;
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             color: var(--text-primary);
             font-size: 14px;
+            text-align: center;
+        }
+        
+        .calc-input:focus {
+            outline: none;
+            border-color: var(--accent-green-light);
+        }
+        
+        .calc-input::placeholder {
+            color: var(--text-muted);
+            font-size: 12px;
         }
         
         .calc-result {
-            padding: 12px;
+            padding: 14px;
             background: var(--accent-green);
             border-radius: 8px;
             text-align: center;
-            font-weight: 600;
-            margin-top: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 16px;
+            color: white;
         }
     </style>
 </head>
