@@ -1,49 +1,24 @@
 {
   "opportunities": [
     {
-      "id": "opp_1",
-      "title": "Civil Engineer for Cost Estimation",
-      "platform": "Upwork",
-      "budget": "$15/hr",
-      "url": "https://www.upwork.com/jobs/Civil-Engineer-for-detailed-cost-estimation",
-      "date": "2025-02-06",
-      "successRate": 78,
+      "id": "opp_live_1",
+      "title": "🔴 Live - يتم التحديث تلقائياً",
+      "platform": "System",
+      "budget": "-",
+      "successRate": 100,
       "status": "new",
-      "proposal": "Dear Hiring Manager,\n\nI am excited to apply for your Civil Engineer Cost Estimation project.\n\nWith 10+ years of experience as a Quantity Surveyor in the UAE and 300+ completed projects, I specialize in:\n\n✓ Detailed cost estimation\n✓ BOQ preparation\n✓ Quantity takeoff from drawings\n✓ Dubai Municipality approved (G+4)\n\nI am proficient in AutoCAD, Bluebeam, and Excel, ensuring accurate and professional deliverables.\n\nI am available to start immediately and committed to delivering precise work within your timeline.\n\nLooking forward to discussing your project.\n\nBest regards,\nEng. Basel Omar\nQuantity Surveyor | UAE"
-    },
-    {
-      "id": "opp_2",
-      "title": "Quantity Takeoff & Cost Estimate for Residential",
-      "platform": "Upwork",
-      "budget": "$50 Fixed",
-      "url": "https://www.upwork.com/jobs/Quantity-Takeoff-Cost-Estimate",
-      "date": "2025-02-06",
-      "successRate": 72,
-      "status": "new",
-      "proposal": "Dear Client,\n\nI am very interested in your Quantity Takeoff & Cost Estimate project.\n\nAs a Quantity Surveyor with extensive experience in residential projects, I can provide:\n\n✓ Accurate quantity takeoff from your drawings\n✓ Detailed BOQ with market-rate pricing\n✓ Cost estimation based on UAE market rates\n✓ Professional Excel/PDF deliverables\n\nMy track record includes 300+ projects and Dubai Municipality approval (G+4).\n\nFor your $50 budget, I will deliver a complete and accurate quantity takeoff with cost estimate.\n\nReady to start immediately.\n\nBest regards,\nEng. Basel Omar"
-    },
-    {
-      "id": "opp_3",
-      "title": "Remote Estimator for Construction Company",
-      "platform": "Upwork",
-      "budget": "TBD",
-      "url": "https://www.upwork.com/jobs/Remote-Estimator-Construction",
-      "date": "2025-02-06",
-      "successRate": 70,
-      "status": "new",
-      "proposal": "Dear Hiring Manager,\n\nI am writing to express my interest in the Remote Estimator position.\n\nWith over 10 years in the construction industry and 300+ completed estimation projects, I offer:\n\n✓ Expert quantity surveying and cost estimation\n✓ Proficiency in AutoCAD, Bluebeam, PlanSwift\n✓ Strong understanding of construction methods and materials\n✓ Excellent communication and remote work capabilities\n\nI am Dubai Municipality approved and have worked on residential, commercial, and infrastructure projects throughout the UAE.\n\nI am seeking a long-term collaboration and am flexible with working hours.\n\nLooking forward to contributing to your team.\n\nBest regards,\nEng. Basel Omar"
-    },
-    {
-      "id": "opp_4",
-      "title": "Interior Drawings & Quantity Survey",
-      "platform": "Freelancer",
-      "budget": "$250-750",
-      "url": "https://www.freelancer.com/projects/quantity-surveyor/interior-drawings",
-      "date": "2025-02-06",
-      "successRate": 68,
-      "status": "new",
-      "proposal": "Dear Client,\n\nI am interested in your Interior Drawings & Quantity Survey project.\n\nMy expertise includes:\n\n✓ Interior fit-out quantity surveying\n✓ Detailed BOQ for all interior works\n✓ Accurate measurements and specifications\n✓ Cost estimation with UAE market rates\n\nI have completed numerous interior projects including offices, retail spaces, and residential units.\n\nFor your budget range of $250-750, I can provide comprehensive quantity surveying services including BOQ, cost estimation, and documentation.\n\nAvailable to discuss your specific requirements.\n\nBest regards,\nEng. Basel Omar\nQuantity Surveyor | 10+ Years Experience"
+      "deadline": "-",
+      "link": "#",
+      "proposal": "الفرص الجديدة هتظهر هنا تلقائياً كل يوم الصبح!",
+      "foundDate": "2025-02-06"
     }
   ],
-  "lastUpdated": "2025-02-06T19:00:00.000Z"
+  "clients": [],
+  "projects": [],
+  "finance": {
+    "income": [],
+    "expenses": []
+  },
+  "lastUpdated": "2025-02-06T23:30:00+04:00",
+  "autoUpdateEnabled": true
 }
