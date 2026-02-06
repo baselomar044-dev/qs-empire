@@ -1,2462 +1,1614 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QS Empire - Eng. Basel Omar</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>QS Empire | م. باسل عمر</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
     <style>
-        :root {
-            --bg: #0a0a0f;
-            --card: #12121a;
-            --card-hover: #1a1a25;
-            --accent: #6366f1;
-            --accent-glow: rgba(99, 102, 241, 0.3);
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --text: #ffffff;
-            --text-dim: #9ca3af;
-            --border: #2a2a3a;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
+        
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #1a1a1a;
+            --bg-hover: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --border: #2a2a2a;
+            --accent-green: #0d5c2f;
+            --accent-green-light: #16a34a;
+            --accent-blue: #1e3a5f;
+            --accent-blue-light: #3b82f6;
+            --accent-red: #7f1d1d;
+            --accent-red-light: #ef4444;
+            --accent-yellow: #854d0e;
+            --accent-yellow-light: #eab308;
         }
-
-        /* === HEADER === */
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        html[dir="rtl"] body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+        
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .login-screen.hidden {
+            display: none;
+        }
+        
+        .login-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-logo {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: var(--accent-green-light);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-green);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .login-btn:hover {
+            background: var(--accent-green-light);
+        }
+        
+        .login-error {
+            color: var(--accent-red-light);
+            margin-top: 16px;
+            display: none;
+        }
+        
+        /* ===== MAIN APP ===== */
+        .app {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        .app.active {
+            display: block;
+        }
+        
+        /* ===== HEADER ===== */
         .header {
-            background: linear-gradient(135deg, var(--card) 0%, #1a1a2e 100%);
-            padding: 20px;
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
+            padding: 16px 20px;
             position: sticky;
             top: 0;
             z-index: 100;
         }
-
+        
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+            justify-content: space-between;
+            gap: 16px;
         }
-
+        
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
+        
         .logo-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
+            font-size: 32px;
         }
-
-        .logo-text h1 {
-            font-size: 1.4rem;
+        
+        .logo-text {
+            font-size: 20px;
             font-weight: 700;
         }
-
-        .logo-text span {
-            font-size: 0.8rem;
-            color: var(--text-dim);
+        
+        .logo-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
         }
-
-        /* === FOCUS MODE TOGGLE === */
-        .focus-toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--card);
-            padding: 8px 16px;
-            border-radius: 25px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .focus-toggle:hover {
-            border-color: var(--accent);
-        }
-
-        /* === AI AGENT PANEL === */
-        .ai-toggle {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            box-shadow: 0 4px 20px var(--accent-glow);
-            transition: all 0.3s;
-        }
-
-        .ai-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 30px var(--accent-glow);
-        }
-
-        .ai-toggle.active {
-            background: var(--danger);
-        }
-
-        .ai-panel {
-            position: fixed;
-            bottom: 100px;
-            left: 25px;
-            width: 400px;
-            max-width: calc(100vw - 50px);
-            height: 500px;
-            max-height: calc(100vh - 150px);
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 999;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
-        }
-
-        .ai-panel.active {
-            display: flex;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .ai-header {
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            padding: 15px 20px;
+        
+        .header-actions {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
-        .ai-header-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .ai-header-info h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .ai-header-info span {
-            font-size: 0.75rem;
-            opacity: 0.8;
-        }
-
-        .ai-status {
-            margin-right: auto;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-        }
-
-        .ai-status-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .ai-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .ai-message {
-            max-width: 85%;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-
-        .ai-message.agent {
-            background: var(--card-hover);
+        
+        .lang-toggle {
+            padding: 8px 16px;
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            align-self: flex-start;
-            border-bottom-right-radius: 4px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-
-        .ai-message.user {
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            align-self: flex-end;
-            border-bottom-left-radius: 4px;
+        
+        .lang-toggle:hover {
+            border-color: var(--accent-blue-light);
         }
-
-        .ai-message.typing {
-            background: var(--card-hover);
-            border: 1px solid var(--border);
-            align-self: flex-start;
-        }
-
-        .ai-message.typing::after {
-            content: '...';
-            animation: typing 1s infinite;
-        }
-
-        @keyframes typing {
-            0%, 100% { content: '.'; }
-            33% { content: '..'; }
-            66% { content: '...'; }
-        }
-
-        .ai-input-area {
-            padding: 15px;
-            background: var(--bg);
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 10px;
-        }
-
-        .ai-input {
-            flex: 1;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 16px;
-            color: var(--text);
-            font-size: 0.9rem;
-            font-family: inherit;
-            resize: none;
-            outline: none;
-        }
-
-        .ai-input:focus {
-            border-color: var(--accent);
-        }
-
-        .ai-send {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+        
+        .logout-btn {
+            padding: 8px 16px;
+            background: var(--accent-red);
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             color: white;
-            font-size: 18px;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: all 0.2s;
         }
-
-        .ai-send:hover {
-            transform: scale(1.05);
+        
+        .logout-btn:hover {
+            background: var(--accent-red-light);
         }
-
-        .ai-send:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .ai-quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 10px 15px;
-            background: var(--bg);
-            border-top: 1px solid var(--border);
-        }
-
-        .ai-quick-btn {
-            padding: 6px 12px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            color: var(--text-dim);
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .ai-quick-btn:hover {
-            border-color: var(--accent);
-            color: var(--text);
-        }
-
-        .focus-toggle.active {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        /* === NAV TABS === */
-        .nav-tabs {
-            display: flex;
-            gap: 8px;
-            padding: 15px 20px;
-            background: var(--card);
+        
+        /* ===== NAV ===== */
+        .nav {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
             overflow-x: auto;
-            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
-
-        .nav-tabs::-webkit-scrollbar {
+        
+        .nav::-webkit-scrollbar {
             display: none;
         }
-
-        .nav-tab {
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: transparent;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            color: var(--text-dim);
-            font-size: 1rem;
+            gap: 4px;
+        }
+        
+        .nav-item {
+            padding: 14px 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
             white-space: nowrap;
-            font-family: inherit;
+            transition: all 0.2s;
         }
-
-        .nav-tab:hover {
-            background: var(--card-hover);
-            color: var(--text);
+        
+        .nav-item:hover {
+            color: var(--text-primary);
         }
-
-        .nav-tab.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-            box-shadow: 0 4px 15px var(--accent-glow);
+        
+        .nav-item.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--accent-green-light);
         }
-
-        .nav-tab .badge {
-            background: rgba(255,255,255,0.2);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-
-        /* === MAIN CONTENT === */
-        .main-content {
+        
+        /* ===== MAIN CONTENT ===== */
+        .main {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
-
+        
         .section {
             display: none;
         }
-
+        
         .section.active {
             display: block;
-            animation: fadeIn 0.3s ease;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* === QUICK ACTIONS === */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .quick-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 20px 15px;
-            background: var(--card);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            color: var(--text);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .quick-btn:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .quick-btn .icon {
-            font-size: 2rem;
-        }
-
-        .quick-btn.primary {
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border-color: transparent;
-        }
-
-        .quick-btn.primary:hover {
-            box-shadow: 0 8px 25px var(--accent-glow);
-        }
-
-        /* === STATS CARDS === */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
-
-        .stat-card .value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-card .label {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        /* === CARDS LIST === */
-        .cards-grid {
-            display: grid;
-            gap: 15px;
-        }
-
+        
+        /* ===== CARDS ===== */
         .card {
-            background: var(--card);
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 20px;
-            transition: all 0.3s;
-            cursor: pointer;
+            margin-bottom: 16px;
         }
-
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateX(-5px);
-        }
-
+        
         .card-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .card-meta {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-
-        .card-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .badge-new { background: var(--accent); color: white; }
-        .badge-hot { background: var(--danger); color: white; }
-        .badge-good { background: var(--success); color: white; }
-        .badge-pending { background: var(--warning); color: #000; }
-        .badge-progress { background: #3b82f6; color: white; }
-        .badge-completed { background: var(--success); color: white; }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border);
+            justify-content: space-between;
+            margin-bottom: 16px;
         }
-
-        .card-price {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--success);
-        }
-
-        .card-actions {
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
             display: flex;
+            align-items: center;
             gap: 8px;
         }
-
-        .btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
+        
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5558e3;
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-dim);
+        
+        .stat-card {
+            background: var(--bg-card);
             border: 1px solid var(--border);
-        }
-
-        .btn-ghost:hover {
-            background: var(--card-hover);
-            color: var(--text);
-        }
-
-        /* === SUCCESS RATE === */
-        .success-rate {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .rate-bar {
-            flex: 1;
-            height: 8px;
-            background: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .rate-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        .rate-fill.high { background: var(--success); }
-        .rate-fill.medium { background: var(--warning); }
-        .rate-fill.low { background: var(--danger); }
-
-        .rate-text {
-            font-weight: 600;
-            min-width: 45px;
-        }
-
-        /* === PROJECTS SECTION === */
-        .project-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 20px;
-            transition: all 0.3s;
         }
-
-        .project-card:hover {
-            border-color: var(--accent);
+        
+        .stat-card.green { border-left: 4px solid var(--accent-green-light); }
+        .stat-card.blue { border-left: 4px solid var(--accent-blue-light); }
+        .stat-card.red { border-left: 4px solid var(--accent-red-light); }
+        .stat-card.yellow { border-left: 4px solid var(--accent-yellow-light); }
+        
+        html[dir="rtl"] .stat-card.green,
+        html[dir="rtl"] .stat-card.blue,
+        html[dir="rtl"] .stat-card.red,
+        html[dir="rtl"] .stat-card.yellow {
+            border-left: none;
+            border-right: 4px solid var(--accent-green-light);
         }
-
-        .project-header {
+        html[dir="rtl"] .stat-card.blue { border-right-color: var(--accent-blue-light); }
+        html[dir="rtl"] .stat-card.red { border-right-color: var(--accent-red-light); }
+        html[dir="rtl"] .stat-card.yellow { border-right-color: var(--accent-yellow-light); }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* ===== OPPORTUNITIES ===== */
+        .opp-list {
             display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .opp-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+        
+        .opp-item:hover {
+            border-color: var(--accent-blue-light);
+        }
+        
+        .opp-header {
+            display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .project-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .project-client {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-top: 3px;
-        }
-
-        .project-progress {
-            margin: 15px 0;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: var(--border);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), #8b5cf6);
-            border-radius: 5px;
-            transition: width 0.5s ease;
-        }
-
-        .project-details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border);
-        }
-
-        .project-detail {
-            text-align: center;
-        }
-
-        .project-detail .value {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        .project-detail .label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-        }
-        
-        /* Project Card Enhanced */
-        .project-card.overdue {
-            border-color: var(--danger);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
-        }
-        
-        .overdue-banner {
-            background: var(--danger);
-            color: white;
-            text-align: center;
-            padding: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin: -20px -20px 15px -20px;
-            border-radius: 16px 16px 0 0;
-        }
-        
-        .project-source {
-            font-size: 0.8rem;
-            color: var(--accent);
-            margin-top: 3px;
-        }
-        
-        .project-timeline {
-            display: flex;
-            gap: 20px;
-            margin: 15px 0;
-            padding: 12px;
-            background: var(--bg);
-            border-radius: 10px;
-        }
-        
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-        }
-        
-        .timeline-icon {
-            font-size: 1.2rem;
-        }
-        
-        .timeline-item .label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-        }
-        
-        .timeline-item .value {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        .timeline-item .value.overdue-text {
-            color: var(--danger);
-        }
-        
-        .project-money {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-            padding: 12px;
-            background: var(--bg);
-            border-radius: 10px;
-        }
-        
-        .money-item {
-            text-align: center;
-        }
-        
-        .money-item .label {
-            font-size: 0.7rem;
-            color: var(--text-dim);
-        }
-        
-        .money-item .value {
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-        
-        .money-item.paid .value {
-            color: var(--success);
-        }
-        
-        .money-item.pending .value {
-            color: var(--warning);
-        }
-        
-        .project-payment-status {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .payment-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        .badge-good {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-        
-        .badge-partial {
-            background: rgba(99, 102, 241, 0.2);
-            color: var(--accent);
-        }
-        
-        .badge-pending {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-        }
-        
-        .badge-progress {
-            background: rgba(99, 102, 241, 0.2);
-            color: var(--accent);
-        }
-        
-        .badge-review {
-            background: rgba(139, 92, 246, 0.2);
-            color: #a78bfa;
-        }
-        
-        /* Project Detail Modal */
-        .project-detail-modal {
-            display: grid;
-            gap: 20px;
-        }
-        
-        .detail-section {
-            padding: 15px;
-            background: var(--bg);
-            border-radius: 10px;
-        }
-        
-        .detail-section h4 {
+            gap: 12px;
             margin-bottom: 12px;
-            color: var(--accent);
         }
         
-        .detail-section p {
-            margin: 8px 0;
-            color: var(--text-dim);
+        .opp-title {
+            font-weight: 600;
+            font-size: 16px;
         }
         
-        .detail-section a {
-            color: var(--accent);
+        .opp-title a {
+            color: var(--text-primary);
             text-decoration: none;
         }
         
-        .detail-section a:hover {
-            text-decoration: underline;
+        .opp-title a:hover {
+            color: var(--accent-blue-light);
         }
-
-        /* === CALCULATOR === */
-        .calc-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+        
+        .opp-platform {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
         }
-
-        .calc-panel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
+        
+        .opp-platform.upwork { background: var(--accent-green); }
+        .opp-platform.freelancer { background: var(--accent-blue); }
+        .opp-platform.mostaql { background: var(--accent-yellow); }
+        .opp-platform.fiverr { background: var(--accent-green); }
+        .opp-platform.linkedin { background: var(--accent-blue); }
+        
+        .opp-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 12px;
         }
-
-        .calc-panel h3 {
-            margin-bottom: 20px;
+        
+        .opp-meta span {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 4px;
         }
-
-        .input-group {
-            margin-bottom: 15px;
+        
+        .opp-success {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
         }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-dim);
-            font-size: 0.9rem;
+        
+        .success-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-hover);
+            border-radius: 3px;
+            overflow: hidden;
         }
-
-        .input-group input,
-        .input-group select {
-            width: 100%;
-            padding: 12px 15px;
-            background: var(--bg);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s;
+        
+        .success-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
         }
-
-        .input-group input:focus,
-        .input-group select:focus {
-            outline: none;
-            border-color: var(--accent);
+        
+        .success-fill.high { background: var(--accent-green-light); }
+        .success-fill.medium { background: var(--accent-yellow-light); }
+        .success-fill.low { background: var(--accent-red-light); }
+        
+        .success-text {
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 45px;
         }
-
-        .calc-result {
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+        
+        .opp-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .opp-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .opp-btn.primary {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .opp-btn.primary:hover {
+            background: var(--accent-green-light);
+        }
+        
+        .opp-btn.secondary {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .opp-btn.secondary:hover {
+            border-color: var(--accent-blue-light);
+        }
+        
+        /* ===== PROJECTS ===== */
+        .project-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            margin-top: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
-
-        .calc-result .total {
-            font-size: 2rem;
-            font-weight: 700;
+        
+        .project-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
         }
-
-        .calc-result .label {
-            opacity: 0.8;
-            font-size: 0.9rem;
+        
+        .project-name {
+            font-weight: 600;
+            font-size: 16px;
         }
-
-        /* === MODAL === */
-        .modal-overlay {
+        
+        .project-status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .project-status.active { background: var(--accent-green); }
+        .project-status.pending { background: var(--accent-yellow); }
+        .project-status.completed { background: var(--accent-blue); }
+        .project-status.overdue { background: var(--accent-red); }
+        
+        .project-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .project-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .project-detail-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        
+        .project-detail-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .payment-status {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .payment-status.paid { background: var(--accent-green); color: white; }
+        .payment-status.pending { background: var(--accent-yellow); color: white; }
+        .payment-status.unpaid { background: var(--accent-red); color: white; }
+        
+        /* ===== FORMS ===== */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue-light);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-green-light);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        /* ===== AI AGENT ===== */
+        .ai-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--accent-green);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+        
+        html[dir="rtl"] .ai-toggle {
+            right: auto;
+            left: 20px;
+        }
+        
+        .ai-toggle:hover {
+            transform: scale(1.1);
+            background: var(--accent-green-light);
+        }
+        
+        .ai-panel {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 380px;
+            max-width: calc(100vw - 40px);
+            height: 500px;
+            max-height: calc(100vh - 120px);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             display: none;
+            flex-direction: column;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        html[dir="rtl"] .ai-panel {
+            right: auto;
+            left: 20px;
+        }
+        
+        .ai-panel.active {
+            display: flex;
+        }
+        
+        .ai-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .ai-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .ai-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .ai-message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .ai-message.user {
+            background: var(--accent-blue);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        
+        html[dir="rtl"] .ai-message.user {
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ai-message.agent {
+            background: var(--bg-hover);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        
+        html[dir="rtl"] .ai-message.agent {
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-input-area {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .ai-quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .ai-quick-btn {
+            padding: 6px 12px;
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ai-quick-btn:hover {
+            border-color: var(--accent-green-light);
+            color: var(--text-primary);
+        }
+        
+        .ai-input-row {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .ai-input {
+            flex: 1;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .ai-input:focus {
+            outline: none;
+            border-color: var(--accent-green-light);
+        }
+        
+        .ai-send {
+            padding: 12px 16px;
+            background: var(--accent-green);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ai-send:hover {
+            background: var(--accent-green-light);
+        }
+        
+        /* ===== MODAL ===== */
+        .modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.8);
-            z-index: 1000;
+            display: none;
             align-items: center;
             justify-content: center;
+            z-index: 2000;
             padding: 20px;
         }
-
+        
         .modal-overlay.active {
             display: flex;
         }
-
+        
         .modal {
-            background: var(--card);
-            border-radius: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             width: 100%;
             max-width: 600px;
             max-height: 90vh;
             overflow-y: auto;
         }
-
+        
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 20px;
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-
-        .modal-header h2 {
-            font-size: 1.3rem;
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
         }
-
+        
         .modal-close {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--bg);
+            background: none;
             border: none;
-            color: var(--text);
-            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 24px;
             cursor: pointer;
-            transition: all 0.3s;
         }
-
-        .modal-close:hover {
-            background: var(--danger);
-        }
-
+        
         .modal-body {
             padding: 20px;
         }
-
-        .proposal-box {
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
+        
+        .proposal-text {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.6;
             white-space: pre-wrap;
-            line-height: 1.8;
-            max-height: 300px;
-            overflow-y: auto;
+            margin-bottom: 16px;
         }
-
+        
         .copy-btn {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--success), #059669);
+            padding: 14px;
+            background: var(--accent-green);
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
+            transition: all 0.2s;
         }
-
+        
         .copy-btn:hover {
-            transform: scale(1.02);
+            background: var(--accent-green-light);
         }
-
-        /* === FOCUS MODE === */
-        body.focus-mode .card:not(.highlighted),
-        body.focus-mode .stat-card:not(.highlighted),
-        body.focus-mode .project-card:not(.highlighted) {
-            opacity: 0.3;
-            filter: grayscale(50%);
+        
+        .copy-btn.copied {
+            background: var(--accent-blue);
         }
-
-        body.focus-mode .card.highlighted,
-        body.focus-mode .stat-card.highlighted,
-        body.focus-mode .project-card.highlighted {
-            border-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-
-        /* === EMPTY STATE === */
+        
+        /* ===== EMPTY STATE ===== */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: var(--text-dim);
+            color: var(--text-secondary);
         }
-
-        .empty-state .icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
+        
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
         }
-
-        /* === RESPONSIVE === */
+        
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header-content {
-                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-value {
+                font-size: 24px;
+            }
+            
+            .nav-item {
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+            
+            .opp-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .opp-actions {
+                width: 100%;
+            }
+            
+            .opp-btn {
+                flex: 1;
                 text-align: center;
             }
-
-            .nav-tabs {
-                justify-content: flex-start;
+            
+            .ai-panel {
+                bottom: 80px;
+                right: 10px;
+                width: calc(100vw - 20px);
+                height: calc(100vh - 100px);
             }
-
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .project-details {
-                grid-template-columns: repeat(2, 1fr);
+            
+            html[dir="rtl"] .ai-panel {
+                right: auto;
+                left: 10px;
             }
         }
-
-        /* === ADD FORM === */
-        .add-form {
-            display: none;
-            background: var(--card);
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .add-form.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .form-row {
+        
+        /* ===== CALCULATOR ===== */
+        .calc-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
         }
-
-        .form-actions {
+        
+        .calc-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .calc-item-title {
+            font-weight: 600;
+            margin-bottom: 12px;
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .calc-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .calc-input {
+            flex: 1;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .calc-result {
+            padding: 12px;
+            background: var(--accent-green);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 12px;
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🏗️</div>
-                <div class="logo-text">
-                    <h1>QS Empire</h1>
-                    <span>Eng. Basel Omar</span>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo">🏗️</div>
+            <div class="login-title" data-en="QS Empire" data-ar="QS Empire">QS Empire</div>
+            <div class="login-subtitle" data-en="Eng. Basel Omar" data-ar="م. باسل عمر">Eng. Basel Omar</div>
+            <input type="password" class="login-input" id="loginPassword" placeholder="••••" maxlength="4" inputmode="numeric">
+            <button class="login-btn" onclick="attemptLogin()" data-en="Enter" data-ar="دخول">Enter</button>
+            <div class="login-error" id="loginError" data-en="Wrong password" data-ar="كلمة المرور خاطئة">Wrong password</div>
+        </div>
+    </div>
+    
+    <!-- MAIN APP -->
+    <div class="app" id="app">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏗️</span>
+                    <div>
+                        <div class="logo-text">QS Empire</div>
+                        <div class="logo-subtitle" data-en="Eng. Basel Omar" data-ar="م. باسل عمر">Eng. Basel Omar</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="lang-toggle" onclick="toggleLanguage()" id="langBtn">عربي</button>
+                    <button class="logout-btn" onclick="logout()" data-en="Logout" data-ar="خروج">Logout</button>
                 </div>
             </div>
-            <div class="focus-toggle" onclick="toggleFocusMode()">
-                <span>🎯</span>
-                <span>Focus Mode</span>
+        </header>
+        
+        <!-- NAV -->
+        <nav class="nav">
+            <div class="nav-content">
+                <div class="nav-item active" data-section="dashboard" data-en="Dashboard" data-ar="لوحة التحكم">Dashboard</div>
+                <div class="nav-item" data-section="opportunities" data-en="Opportunities" data-ar="الفرص">Opportunities</div>
+                <div class="nav-item" data-section="projects" data-en="Projects" data-ar="المشاريع">Projects</div>
+                <div class="nav-item" data-section="clients" data-en="Clients" data-ar="العملاء">Clients</div>
+                <div class="nav-item" data-section="calculator" data-en="Calculator" data-ar="الحاسبة">Calculator</div>
+            </div>
+        </nav>
+        
+        <!-- MAIN -->
+        <main class="main">
+            <!-- DASHBOARD -->
+            <section class="section active" id="dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card green">
+                        <div class="stat-value" id="statOpps">0</div>
+                        <div class="stat-label" data-en="New Opportunities" data-ar="فرص جديدة">New Opportunities</div>
+                    </div>
+                    <div class="stat-card blue">
+                        <div class="stat-value" id="statProjects">0</div>
+                        <div class="stat-label" data-en="Active Projects" data-ar="مشاريع نشطة">Active Projects</div>
+                    </div>
+                    <div class="stat-card yellow">
+                        <div class="stat-value" id="statPending">0</div>
+                        <div class="stat-label" data-en="Pending Payment" data-ar="في انتظار الدفع">Pending Payment</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-value" id="statUrgent">0</div>
+                        <div class="stat-label" data-en="Urgent Deadlines" data-ar="مواعيد عاجلة">Urgent Deadlines</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📋 <span data-en="Recent Opportunities" data-ar="أحدث الفرص">Recent Opportunities</span></div>
+                    </div>
+                    <div id="recentOpps">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔍</div>
+                            <div data-en="Searching for opportunities..." data-ar="جاري البحث عن فرص...">Searching for opportunities...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- OPPORTUNITIES -->
+            <section class="section" id="opportunities">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🎯 <span data-en="All Opportunities" data-ar="كل الفرص">All Opportunities</span></div>
+                        <button class="btn btn-primary" onclick="refreshOpportunities()" data-en="Refresh" data-ar="تحديث">Refresh</button>
+                    </div>
+                    <div class="opp-list" id="oppList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <div data-en="No opportunities yet" data-ar="لا توجد فرص حتى الآن">No opportunities yet</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- PROJECTS -->
+            <section class="section" id="projects">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📁 <span data-en="My Projects" data-ar="مشاريعي">My Projects</span></div>
+                        <button class="btn btn-primary" onclick="showAddProject()" data-en="+ Add Project" data-ar="+ إضافة مشروع">+ Add Project</button>
+                    </div>
+                    <div id="projectList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📂</div>
+                            <div data-en="No projects yet" data-ar="لا توجد مشاريع حتى الآن">No projects yet</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- CLIENTS -->
+            <section class="section" id="clients">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">👥 <span data-en="Clients" data-ar="العملاء">Clients</span></div>
+                        <button class="btn btn-primary" onclick="showAddClient()" data-en="+ Add Client" data-ar="+ إضافة عميل">+ Add Client</button>
+                    </div>
+                    <div id="clientList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">👤</div>
+                            <div data-en="No clients yet" data-ar="لا يوجد عملاء حتى الآن">No clients yet</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- CALCULATOR -->
+            <section class="section" id="calculator">
+                <div class="calc-grid">
+                    <div class="calc-item">
+                        <div class="calc-item-title">🧱 <span data-en="Concrete Volume" data-ar="حجم الخرسانة">Concrete Volume</span></div>
+                        <div class="calc-row">
+                            <input type="number" class="calc-input" id="concLength" placeholder="Length (m)">
+                            <input type="number" class="calc-input" id="concWidth" placeholder="Width (m)">
+                            <input type="number" class="calc-input" id="concHeight" placeholder="Height (m)">
+                        </div>
+                        <button class="btn btn-primary" onclick="calcConcrete()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
+                        <div class="calc-result" id="concResult">0 m³</div>
+                    </div>
+                    
+                    <div class="calc-item">
+                        <div class="calc-item-title">🔩 <span data-en="Steel Weight" data-ar="وزن الحديد">Steel Weight</span></div>
+                        <div class="calc-row">
+                            <input type="number" class="calc-input" id="steelDia" placeholder="Diameter (mm)">
+                            <input type="number" class="calc-input" id="steelLength" placeholder="Length (m)">
+                            <input type="number" class="calc-input" id="steelQty" placeholder="Quantity">
+                        </div>
+                        <button class="btn btn-primary" onclick="calcSteel()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
+                        <div class="calc-result" id="steelResult">0 kg</div>
+                    </div>
+                    
+                    <div class="calc-item">
+                        <div class="calc-item-title">🏗️ <span data-en="Block Work" data-ar="البلوك">Block Work</span></div>
+                        <div class="calc-row">
+                            <input type="number" class="calc-input" id="wallLength" placeholder="Length (m)">
+                            <input type="number" class="calc-input" id="wallHeight" placeholder="Height (m)">
+                        </div>
+                        <button class="btn btn-primary" onclick="calcBlocks()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
+                        <div class="calc-result" id="blockResult">0 blocks</div>
+                    </div>
+                    
+                    <div class="calc-item">
+                        <div class="calc-item-title">🎨 <span data-en="Paint Area" data-ar="مساحة الدهان">Paint Area</span></div>
+                        <div class="calc-row">
+                            <input type="number" class="calc-input" id="paintLength" placeholder="Length (m)">
+                            <input type="number" class="calc-input" id="paintHeight" placeholder="Height (m)">
+                            <input type="number" class="calc-input" id="paintCoats" placeholder="Coats" value="2">
+                        </div>
+                        <button class="btn btn-primary" onclick="calcPaint()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
+                        <div class="calc-result" id="paintResult">0 m² | 0 L</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- AI AGENT TOGGLE -->
+    <button class="ai-toggle" onclick="toggleAI()" id="aiToggle" style="display:none">🤖</button>
+    
+    <!-- AI PANEL -->
+    <div class="ai-panel" id="aiPanel">
+        <div class="ai-header">
+            <div class="ai-title">🤖 <span data-en="QS Agent" data-ar="مساعد QS">QS Agent</span></div>
+            <button class="ai-close" onclick="toggleAI()">×</button>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="ai-message agent" data-en="Hello Eng. Basel. I'm your QS Agent. How can I assist you today?" data-ar="أهلاً م. باسل. أنا مساعدك في QS Empire. كيف أقدر أساعدك؟">Hello Eng. Basel. I'm your QS Agent. How can I assist you today?</div>
+        </div>
+        <div class="ai-input-area">
+            <div class="ai-quick-actions">
+                <button class="ai-quick-btn" onclick="aiQuick('search')" data-en="🔍 Find Opportunities" data-ar="🔍 ابحث عن فرص">🔍 Find Opportunities</button>
+                <button class="ai-quick-btn" onclick="aiQuick('proposal')" data-en="📝 Write Proposal" data-ar="📝 اكتب Proposal">📝 Write Proposal</button>
+                <button class="ai-quick-btn" onclick="aiQuick('price')" data-en="💰 Suggest Price" data-ar="💰 اقترح سعر">💰 Suggest Price</button>
+            </div>
+            <div class="ai-input-row">
+                <input type="text" class="ai-input" id="aiInput" placeholder="Type your message...">
+                <button class="ai-send" onclick="sendAI()">➤</button>
             </div>
         </div>
-    </header>
-
-    <!-- NAVIGATION -->
-    <nav class="nav-tabs">
-        <button class="nav-tab active" data-section="dashboard">
-            <span>🏠</span> الرئيسية
-        </button>
-        <button class="nav-tab" data-section="opportunities">
-            <span>🎯</span> الفرص <span class="badge" id="opp-count">0</span>
-        </button>
-        <button class="nav-tab" data-section="projects">
-            <span>📁</span> المشاريع <span class="badge" id="proj-count">0</span>
-        </button>
-        <button class="nav-tab" data-section="clients">
-            <span>👥</span> العملاء
-        </button>
-        <button class="nav-tab" data-section="calculator">
-            <span>🧮</span> الحاسبة
-        </button>
-        <button class="nav-tab" data-section="finance">
-            <span>💰</span> المالية
-        </button>
-    </nav>
-
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-        <!-- ========== DASHBOARD ========== -->
-        <section id="dashboard" class="section active">
-            <div class="quick-actions">
-                <button class="quick-btn primary" onclick="switchSection('opportunities')">
-                    <span class="icon">🎯</span>
-                    شوف الفرص
-                </button>
-                <button class="quick-btn" onclick="switchSection('projects'); showAddProject()">
-                    <span class="icon">➕</span>
-                    مشروع جديد
-                </button>
-                <button class="quick-btn" onclick="switchSection('calculator')">
-                    <span class="icon">🧮</span>
-                    حساب كميات
-                </button>
-                <button class="quick-btn" onclick="switchSection('finance')">
-                    <span class="icon">💵</span>
-                    دخل جديد
-                </button>
-            </div>
-
-            <div class="stats-row">
-                <div class="stat-card highlighted">
-                    <div class="value" id="stat-opportunities">0</div>
-                    <div class="label">فرص جديدة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="value" id="stat-projects">0</div>
-                    <div class="label">مشاريع نشطة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="value" id="stat-clients">0</div>
-                    <div class="label">عملاء</div>
-                </div>
-                <div class="stat-card">
-                    <div class="value" id="stat-revenue">0</div>
-                    <div class="label">الدخل (AED)</div>
-                </div>
-            </div>
-
-            <h3 style="margin-bottom: 15px;">🔥 أحدث الفرص</h3>
-            <div class="cards-grid" id="latest-opportunities"></div>
-        </section>
-
-        <!-- ========== OPPORTUNITIES ========== -->
-        <section id="opportunities" class="section">
-            <div class="stats-row">
-                <div class="stat-card highlighted">
-                    <div class="value" id="total-opps">0</div>
-                    <div class="label">إجمالي الفرص</div>
-                </div>
-                <div class="stat-card">
-                    <div class="value" id="high-success">0</div>
-                    <div class="label">نسبة نجاح عالية</div>
-                </div>
-            </div>
-
-            <div class="cards-grid" id="opportunities-list"></div>
-        </section>
-
-        <!-- ========== PROJECTS ========== -->
-        <section id="projects" class="section">
-            <div class="quick-actions" style="margin-bottom: 20px;">
-                <button class="quick-btn primary" onclick="showAddProject()">
-                    <span class="icon">➕</span>
-                    مشروع جديد
-                </button>
-                <button class="quick-btn" onclick="filterProjects('all')">
-                    <span class="icon">📋</span>
-                    الكل
-                </button>
-                <button class="quick-btn" onclick="filterProjects('pending-payment')">
-                    <span class="icon">💳</span>
-                    في انتظار الدفع
-                </button>
-                <button class="quick-btn" onclick="filterProjects('overdue')">
-                    <span class="icon">⚠️</span>
-                    متأخرة
-                </button>
-            </div>
-
-            <!-- Add Project Form -->
-            <div class="add-form" id="add-project-form">
-                <h3 style="margin-bottom: 20px;">➕ إضافة مشروع جديد</h3>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>اسم المشروع *</label>
-                        <input type="text" id="project-name" placeholder="مثال: فيلا السيد أحمد - الشارقة">
-                    </div>
-                    <div class="input-group">
-                        <label>العميل *</label>
-                        <input type="text" id="project-client" placeholder="اسم العميل أو الشركة">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>هاتف العميل</label>
-                        <input type="tel" id="project-client-phone" placeholder="+971 50 XXX XXXX">
-                    </div>
-                    <div class="input-group">
-                        <label>بريد العميل</label>
-                        <input type="email" id="project-client-email" placeholder="email@example.com">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>نوع المشروع</label>
-                        <select id="project-type">
-                            <option value="BOQ">BOQ حصر كميات</option>
-                            <option value="تسعير">تسعير مقاولات</option>
-                            <option value="فيلا">فيلا</option>
-                            <option value="مبنى سكني">مبنى سكني</option>
-                            <option value="تجاري">تجاري</option>
-                            <option value="برج">برج</option>
-                            <option value="تجديد">تجديد</option>
-                            <option value="أخرى">أخرى</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>المنصة/المصدر</label>
-                        <select id="project-source">
-                            <option value="Upwork">Upwork</option>
-                            <option value="Freelancer">Freelancer</option>
-                            <option value="Mostaql">مستقل</option>
-                            <option value="Fiverr">Fiverr</option>
-                            <option value="LinkedIn">LinkedIn</option>
-                            <option value="Direct">مباشر</option>
-                            <option value="Referral">إحالة</option>
-                            <option value="Other">أخرى</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>القيمة الإجمالية (AED) *</label>
-                        <input type="number" id="project-value" placeholder="0">
-                    </div>
-                    <div class="input-group">
-                        <label>المدفوع (AED)</label>
-                        <input type="number" id="project-paid" placeholder="0">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>تاريخ البداية</label>
-                        <input type="date" id="project-start">
-                    </div>
-                    <div class="input-group">
-                        <label>⏰ موعد التسليم *</label>
-                        <input type="date" id="project-deadline">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>تم التسليم في</label>
-                        <input type="date" id="project-delivered">
-                    </div>
-                    <div class="input-group">
-                        <label>الحالة</label>
-                        <select id="project-status">
-                            <option value="جديد">جديد</option>
-                            <option value="قيد التنفيذ">قيد التنفيذ</option>
-                            <option value="في انتظار المراجعة">في انتظار المراجعة</option>
-                            <option value="تم التسليم">تم التسليم</option>
-                            <option value="معلق">معلق</option>
-                            <option value="ملغي">ملغي</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>💳 حالة الدفع</label>
-                        <select id="project-payment">
-                            <option value="غير مدفوع">غير مدفوع</option>
-                            <option value="دفعة مقدمة">دفعة مقدمة</option>
-                            <option value="جزئي">مدفوع جزئياً</option>
-                            <option value="مدفوع بالكامل">مدفوع بالكامل ✅</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>نسبة الإنجاز %</label>
-                        <input type="range" id="project-progress" min="0" max="100" value="0" oninput="document.getElementById('progress-value').textContent = this.value + '%'">
-                        <span id="progress-value" style="color: var(--accent); font-weight: bold;">0%</span>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>ملاحظات</label>
-                    <textarea id="project-notes" placeholder="أي ملاحظات إضافية..." rows="2" style="width:100%; padding:12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); resize:vertical;"></textarea>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary" onclick="addProject()">💾 حفظ المشروع</button>
-                    <button class="btn btn-ghost" onclick="hideAddProject()">إلغاء</button>
-                </div>
-            </div>
-
-            <div class="stats-row">
-                <div class="stat-card">
-                    <div class="value" id="active-projects">0</div>
-                    <div class="label">مشاريع نشطة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="value" id="completed-projects">0</div>
-                    <div class="label">تم تسليمها</div>
-                </div>
-                <div class="stat-card" style="border-color: var(--success);">
-                    <div class="value" style="color: var(--success);" id="total-paid">0</div>
-                    <div class="label">المحصّل (AED)</div>
-                </div>
-                <div class="stat-card" style="border-color: var(--warning);">
-                    <div class="value" style="color: var(--warning);" id="total-pending">0</div>
-                    <div class="label">في الانتظار (AED)</div>
-                </div>
-            </div>
-
-            <div class="cards-grid" id="projects-list"></div>
-        </section>
-
-        <!-- ========== CLIENTS ========== -->
-        <section id="clients" class="section">
-            <div class="quick-actions" style="margin-bottom: 20px;">
-                <button class="quick-btn primary" onclick="showAddClient()">
-                    <span class="icon">➕</span>
-                    عميل جديد
-                </button>
-            </div>
-
-            <div class="add-form" id="add-client-form">
-                <h3 style="margin-bottom: 20px;">➕ إضافة عميل جديد</h3>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>اسم العميل</label>
-                        <input type="text" id="client-name" placeholder="الاسم الكامل">
-                    </div>
-                    <div class="input-group">
-                        <label>الشركة</label>
-                        <input type="text" id="client-company" placeholder="اسم الشركة (اختياري)">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>الهاتف</label>
-                        <input type="tel" id="client-phone" placeholder="+971 50 XXX XXXX">
-                    </div>
-                    <div class="input-group">
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" id="client-email" placeholder="email@example.com">
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary" onclick="addClient()">💾 حفظ العميل</button>
-                    <button class="btn btn-ghost" onclick="hideAddClient()">إلغاء</button>
-                </div>
-            </div>
-
-            <div class="cards-grid" id="clients-list"></div>
-        </section>
-
-        <!-- ========== CALCULATOR ========== -->
-        <section id="calculator" class="section">
-            <div class="calc-container">
-                <div class="calc-panel">
-                    <h3>🧮 حساب سريع</h3>
-                    <div class="input-group">
-                        <label>نوع العمل</label>
-                        <select id="calc-type" onchange="updateCalc()">
-                            <option value="excavation">حفر</option>
-                            <option value="concrete">خرسانة</option>
-                            <option value="blocks">بلوك</option>
-                            <option value="plaster">لياسة</option>
-                            <option value="tiles">بلاط</option>
-                            <option value="paint">دهان</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label>الطول (م)</label>
-                            <input type="number" id="calc-length" value="10" onchange="updateCalc()">
-                        </div>
-                        <div class="input-group">
-                            <label>العرض (م)</label>
-                            <input type="number" id="calc-width" value="10" onchange="updateCalc()">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>العمق/الارتفاع (م)</label>
-                        <input type="number" id="calc-height" value="3" onchange="updateCalc()">
-                    </div>
-                    <div class="calc-result">
-                        <div class="label">الكمية</div>
-                        <div class="total" id="calc-quantity">300 م³</div>
-                    </div>
-                    <div class="calc-result" style="margin-top: 10px; background: var(--success);">
-                        <div class="label">التكلفة التقديرية</div>
-                        <div class="total" id="calc-cost">15,000 AED</div>
-                    </div>
-                </div>
-
-                <div class="calc-panel">
-                    <h3>📊 تقدير مشروع كامل</h3>
-                    <div class="input-group">
-                        <label>نوع المشروع</label>
-                        <select id="proj-type" onchange="updateProjectEstimate()">
-                            <option value="villa">فيلا</option>
-                            <option value="building">مبنى سكني</option>
-                            <option value="commercial">تجاري</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>المساحة الإجمالية (م²)</label>
-                        <input type="number" id="proj-area" value="500" onchange="updateProjectEstimate()">
-                    </div>
-                    <div class="input-group">
-                        <label>مستوى التشطيب</label>
-                        <select id="proj-finish" onchange="updateProjectEstimate()">
-                            <option value="standard">عادي</option>
-                            <option value="luxury">فاخر</option>
-                            <option value="super">سوبر لوكس</option>
-                        </select>
-                    </div>
-                    <div class="calc-result">
-                        <div class="label">التكلفة التقديرية</div>
-                        <div class="total" id="proj-estimate">750,000 AED</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========== FINANCE ========== -->
-        <section id="finance" class="section">
-            <div class="quick-actions" style="margin-bottom: 20px;">
-                <button class="quick-btn primary" onclick="showAddIncome()">
-                    <span class="icon">💵</span>
-                    إضافة دخل
-                </button>
-                <button class="quick-btn" onclick="showAddExpense()">
-                    <span class="icon">📤</span>
-                    إضافة مصروف
-                </button>
-            </div>
-
-            <div class="add-form" id="add-income-form">
-                <h3 style="margin-bottom: 20px;">💵 إضافة دخل</h3>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>الوصف</label>
-                        <input type="text" id="income-desc" placeholder="مثال: دفعة مشروع فيلا">
-                    </div>
-                    <div class="input-group">
-                        <label>المبلغ (AED)</label>
-                        <input type="number" id="income-amount" placeholder="0">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>التاريخ</label>
-                        <input type="date" id="income-date">
-                    </div>
-                    <div class="input-group">
-                        <label>العميل/المشروع</label>
-                        <input type="text" id="income-source" placeholder="اختياري">
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary" onclick="addIncome()">💾 حفظ</button>
-                    <button class="btn btn-ghost" onclick="hideAddIncome()">إلغاء</button>
-                </div>
-            </div>
-
-            <div class="add-form" id="add-expense-form">
-                <h3 style="margin-bottom: 20px;">📤 إضافة مصروف</h3>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>الوصف</label>
-                        <input type="text" id="expense-desc" placeholder="مثال: اشتراك Upwork">
-                    </div>
-                    <div class="input-group">
-                        <label>المبلغ (AED)</label>
-                        <input type="number" id="expense-amount" placeholder="0">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>التاريخ</label>
-                        <input type="date" id="expense-date">
-                    </div>
-                    <div class="input-group">
-                        <label>الفئة</label>
-                        <select id="expense-category">
-                            <option value="subscriptions">اشتراكات</option>
-                            <option value="software">برامج</option>
-                            <option value="transport">مواصلات</option>
-                            <option value="other">أخرى</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary" onclick="addExpense()">💾 حفظ</button>
-                    <button class="btn btn-ghost" onclick="hideAddExpense()">إلغاء</button>
-                </div>
-            </div>
-
-            <div class="stats-row">
-                <div class="stat-card" style="border-color: var(--success);">
-                    <div class="value" style="color: var(--success);" id="total-income">0</div>
-                    <div class="label">إجمالي الدخل</div>
-                </div>
-                <div class="stat-card" style="border-color: var(--danger);">
-                    <div class="value" style="color: var(--danger);" id="total-expenses">0</div>
-                    <div class="label">إجمالي المصروفات</div>
-                </div>
-                <div class="stat-card" style="border-color: var(--accent);">
-                    <div class="value" id="net-profit">0</div>
-                    <div class="label">صافي الربح</div>
-                </div>
-            </div>
-
-            <h3 style="margin: 20px 0 15px;">📋 آخر المعاملات</h3>
-            <div class="cards-grid" id="transactions-list"></div>
-        </section>
-    </main>
-
+    </div>
+    
     <!-- MODAL -->
-    <div class="modal-overlay" id="modal">
-        <div class="modal">
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h2 id="modal-title">تفاصيل</h2>
+                <div class="modal-title" id="modalTitle">Modal</div>
                 <button class="modal-close" onclick="closeModal()">×</button>
             </div>
-            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
     <script>
-        // ===== DATA STORE =====
-        let data = {
+        // ===== CONFIG =====
+        const PASSWORD = '1606';
+        const STORAGE_KEY = 'qs_empire_data';
+        let currentLang = localStorage.getItem('qs_lang') || 'en';
+        let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
             opportunities: [],
             projects: [],
             clients: [],
-            income: [],
-            expenses: []
+            stats: { opps: 0, projects: 0, pending: 0, urgent: 0 }
         };
-
-        // Load from localStorage
-        function loadData() {
-            const saved = localStorage.getItem('qs_empire_data');
-            if (saved) {
-                data = JSON.parse(saved);
+        
+        // ===== AUTH =====
+        function checkAuth() {
+            const auth = sessionStorage.getItem('qs_auth');
+            if (auth === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('app').classList.add('active');
+                document.getElementById('aiToggle').style.display = 'flex';
+                loadData();
             }
-            // Also try to load opportunities from data.json
-            fetch('data.json')
-                .then(r => r.json())
-                .then(json => {
-                    if (json.opportunities && json.opportunities.length > 0) {
-                        // Merge with existing, avoiding duplicates
-                        json.opportunities.forEach(opp => {
-                            if (!data.opportunities.find(o => o.id === opp.id)) {
-                                data.opportunities.push(opp);
-                            }
-                        });
-                        saveData();
-                    }
-                    renderAll();
-                })
-                .catch(() => renderAll());
         }
-
-        function saveData() {
-            localStorage.setItem('qs_empire_data', JSON.stringify(data));
+        
+        function attemptLogin() {
+            const pwd = document.getElementById('loginPassword').value;
+            if (pwd === PASSWORD) {
+                sessionStorage.setItem('qs_auth', 'true');
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('app').classList.add('active');
+                document.getElementById('aiToggle').style.display = 'flex';
+                loadData();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('loginPassword').value = '';
+            }
         }
-
+        
+        function logout() {
+            sessionStorage.removeItem('qs_auth');
+            location.reload();
+        }
+        
+        document.getElementById('loginPassword').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') attemptLogin();
+        });
+        
+        // ===== LANGUAGE =====
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            localStorage.setItem('qs_lang', currentLang);
+            applyLanguage();
+        }
+        
+        function applyLanguage() {
+            const isAr = currentLang === 'ar';
+            document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+            document.documentElement.lang = currentLang;
+            document.getElementById('langBtn').textContent = isAr ? 'English' : 'عربي';
+            document.getElementById('aiInput').placeholder = isAr ? 'اكتب رسالتك...' : 'Type your message...';
+            
+            document.querySelectorAll('[data-' + currentLang + ']').forEach(el => {
+                el.textContent = el.getAttribute('data-' + currentLang);
+            });
+        }
+        
         // ===== NAVIGATION =====
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const section = tab.dataset.section;
-                switchSection(section);
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById(item.dataset.section).classList.add('active');
             });
         });
-
-        function switchSection(sectionId) {
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            
-            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
-            document.getElementById(sectionId).classList.add('active');
+        
+        // ===== DATA =====
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
         }
-
-        // ===== FOCUS MODE =====
-        function toggleFocusMode() {
-            document.body.classList.toggle('focus-mode');
-            document.querySelector('.focus-toggle').classList.toggle('active');
-        }
-
-        // ===== RENDER FUNCTIONS =====
-        function renderAll() {
-            renderStats();
+        
+        function loadData() {
+            updateStats();
             renderOpportunities();
             renderProjects();
             renderClients();
-            renderFinance();
         }
-
-        function renderStats() {
-            document.getElementById('stat-opportunities').textContent = data.opportunities.length;
-            document.getElementById('stat-projects').textContent = data.projects.filter(p => p.status === 'قيد التنفيذ').length;
-            document.getElementById('stat-clients').textContent = data.clients.length;
-            
-            const totalIncome = data.income.reduce((sum, i) => sum + (parseFloat(i.amount) || 0), 0);
-            document.getElementById('stat-revenue').textContent = totalIncome.toLocaleString();
-
-            document.getElementById('opp-count').textContent = data.opportunities.length;
-            document.getElementById('proj-count').textContent = data.projects.length;
+        
+        function updateStats() {
+            document.getElementById('statOpps').textContent = appData.opportunities.length;
+            document.getElementById('statProjects').textContent = appData.projects.filter(p => p.status === 'active').length;
+            document.getElementById('statPending').textContent = appData.projects.filter(p => p.payment === 'pending').length;
+            document.getElementById('statUrgent').textContent = appData.projects.filter(p => {
+                const deadline = new Date(p.deadline);
+                const diff = (deadline - new Date()) / (1000 * 60 * 60 * 24);
+                return diff <= 3 && diff > 0;
+            }).length;
         }
-
+        
+        // ===== OPPORTUNITIES =====
         function renderOpportunities() {
-            const container = document.getElementById('opportunities-list');
-            const latestContainer = document.getElementById('latest-opportunities');
+            const list = document.getElementById('oppList');
+            const recent = document.getElementById('recentOpps');
             
-            document.getElementById('total-opps').textContent = data.opportunities.length;
-            document.getElementById('high-success').textContent = data.opportunities.filter(o => o.successRate >= 70).length;
-
-            if (data.opportunities.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">🎯</div>
-                        <h3>لا توجد فرص حالياً</h3>
-                        <p>الفرص الجديدة ستظهر هنا تلقائياً</p>
-                    </div>
-                `;
-                latestContainer.innerHTML = container.innerHTML;
+            if (appData.opportunities.length === 0) {
+                const emptyHtml = `<div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <div data-en="No opportunities yet" data-ar="لا توجد فرص حتى الآن">${currentLang === 'ar' ? 'لا توجد فرص حتى الآن' : 'No opportunities yet'}</div>
+                </div>`;
+                list.innerHTML = emptyHtml;
+                recent.innerHTML = emptyHtml;
                 return;
             }
-
-            const renderCard = (opp) => `
-                <div class="card ${opp.successRate >= 70 ? 'highlighted' : ''}" onclick="showOpportunity('${opp.id}')">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-title">${opp.title}</div>
-                            <div class="card-meta">${opp.platform} • ${opp.date || 'اليوم'}</div>
-                        </div>
-                        <span class="card-badge ${opp.successRate >= 70 ? 'badge-hot' : 'badge-new'}">
-                            ${opp.successRate >= 70 ? '🔥 فرصة قوية' : '✨ جديد'}
-                        </span>
+            
+            const html = appData.opportunities.map(opp => renderOppItem(opp)).join('');
+            list.innerHTML = html;
+            recent.innerHTML = appData.opportunities.slice(0, 3).map(opp => renderOppItem(opp)).join('');
+        }
+        
+        function renderOppItem(opp) {
+            const successClass = opp.successRate >= 70 ? 'high' : opp.successRate >= 40 ? 'medium' : 'low';
+            return `
+                <div class="opp-item">
+                    <div class="opp-header">
+                        <div class="opp-title"><a href="${opp.url}" target="_blank">${opp.title}</a></div>
+                        <span class="opp-platform ${opp.platform.toLowerCase()}">${opp.platform}</span>
                     </div>
-                    <div class="success-rate">
-                        <span>نسبة النجاح:</span>
-                        <div class="rate-bar">
-                            <div class="rate-fill ${opp.successRate >= 70 ? 'high' : opp.successRate >= 50 ? 'medium' : 'low'}" 
-                                 style="width: ${opp.successRate}%"></div>
-                        </div>
-                        <span class="rate-text">${opp.successRate}%</span>
+                    <div class="opp-meta">
+                        <span>💰 ${opp.budget}</span>
+                        <span>📍 ${opp.location || 'Remote'}</span>
+                        <span>⏰ ${opp.posted}</span>
                     </div>
-                    <div class="card-footer">
-                        <span class="card-price">${opp.budget}</span>
-                        <div class="card-actions">
-                            <button class="btn btn-primary" onclick="event.stopPropagation(); showOpportunity('${opp.id}')">
-                                📋 Proposal
-                            </button>
-                        </div>
+                    <div class="opp-success">
+                        <div class="success-bar"><div class="success-fill ${successClass}" style="width:${opp.successRate}%"></div></div>
+                        <div class="success-text">${opp.successRate}%</div>
+                    </div>
+                    <div class="opp-actions">
+                        <button class="opp-btn primary" onclick="showProposal('${opp.id}')" data-en="View Proposal" data-ar="عرض العرض">${currentLang === 'ar' ? 'عرض العرض' : 'View Proposal'}</button>
+                        <a href="${opp.url}" target="_blank" class="opp-btn secondary" data-en="Apply Now" data-ar="قدم الآن">${currentLang === 'ar' ? 'قدم الآن' : 'Apply Now'}</a>
                     </div>
                 </div>
             `;
-
-            container.innerHTML = data.opportunities.map(renderCard).join('');
-            latestContainer.innerHTML = data.opportunities.slice(0, 3).map(renderCard).join('');
-        }
-
-        let projectFilter = 'all';
-        
-        function filterProjects(filter) {
-            projectFilter = filter;
-            renderProjects();
         }
         
-        function renderProjects() {
-            const container = document.getElementById('projects-list');
-            
-            // Stats
-            const active = data.projects.filter(p => ['جديد', 'قيد التنفيذ', 'في انتظار المراجعة'].includes(p.status)).length;
-            const completed = data.projects.filter(p => p.status === 'تم التسليم').length;
-            const totalPaid = data.projects.reduce((sum, p) => sum + (parseFloat(p.paid) || 0), 0);
-            const totalValue = data.projects.reduce((sum, p) => sum + (parseFloat(p.value) || 0), 0);
-            const totalPending = totalValue - totalPaid;
-
-            document.getElementById('active-projects').textContent = active;
-            document.getElementById('completed-projects').textContent = completed;
-            document.getElementById('total-paid').textContent = totalPaid.toLocaleString();
-            document.getElementById('total-pending').textContent = totalPending.toLocaleString();
-
-            if (data.projects.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📁</div>
-                        <h3>لا توجد مشاريع</h3>
-                        <p>أضف مشروعك الأول</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Filter projects
-            let filtered = data.projects;
-            const today = new Date().toISOString().split('T')[0];
-            
-            if (projectFilter === 'pending-payment') {
-                filtered = data.projects.filter(p => p.payment !== 'مدفوع بالكامل');
-            } else if (projectFilter === 'overdue') {
-                filtered = data.projects.filter(p => p.deadline && p.deadline < today && p.status !== 'تم التسليم' && p.status !== 'ملغي');
-            }
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">✨</div>
-                        <h3>لا توجد نتائج</h3>
-                        <p>لا يوجد مشاريع تطابق الفلتر</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = filtered.map(proj => {
-                const progress = proj.progress || 0;
-                const isOverdue = proj.deadline && proj.deadline < today && proj.status !== 'تم التسليم' && proj.status !== 'ملغي';
-                const remaining = (parseFloat(proj.value) || 0) - (parseFloat(proj.paid) || 0);
-                
-                // Status badge color
-                let statusClass = 'badge-new';
-                if (proj.status === 'تم التسليم') statusClass = 'badge-good';
-                else if (proj.status === 'قيد التنفيذ') statusClass = 'badge-progress';
-                else if (proj.status === 'معلق' || proj.status === 'ملغي') statusClass = 'badge-pending';
-                else if (proj.status === 'في انتظار المراجعة') statusClass = 'badge-review';
-                
-                // Payment badge
-                let paymentClass = 'badge-pending';
-                let paymentIcon = '⏳';
-                if (proj.payment === 'مدفوع بالكامل') { paymentClass = 'badge-good'; paymentIcon = '✅'; }
-                else if (proj.payment === 'جزئي' || proj.payment === 'دفعة مقدمة') { paymentClass = 'badge-partial'; paymentIcon = '💳'; }
-                else { paymentClass = 'badge-pending'; paymentIcon = '⚠️'; }
-                
-                return `
-                    <div class="project-card ${isOverdue ? 'overdue' : ''}" onclick="showProjectDetails('${proj.id}')">
-                        ${isOverdue ? '<div class="overdue-banner">⚠️ متأخر عن الموعد</div>' : ''}
-                        <div class="project-header">
-                            <div>
-                                <div class="project-title">${proj.name}</div>
-                                <div class="project-client">👤 ${proj.client || 'غير محدد'}</div>
-                                ${proj.source ? `<div class="project-source">📍 ${proj.source}</div>` : ''}
-                            </div>
-                            <span class="card-badge ${statusClass}">${proj.status || 'جديد'}</span>
-                        </div>
-                        
-                        <div class="project-progress">
-                            <div class="progress-header">
-                                <span>التقدم</span>
-                                <span>${progress}%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${progress}%"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="project-timeline">
-                            <div class="timeline-item">
-                                <span class="timeline-icon">📅</span>
-                                <div>
-                                    <div class="label">موعد التسليم</div>
-                                    <div class="value ${isOverdue ? 'overdue-text' : ''}">${proj.deadline || '-'}</div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <span class="timeline-icon">✅</span>
-                                <div>
-                                    <div class="label">تم التسليم</div>
-                                    <div class="value">${proj.delivered || '-'}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="project-money">
-                            <div class="money-item">
-                                <div class="label">القيمة</div>
-                                <div class="value">${parseFloat(proj.value || 0).toLocaleString()} AED</div>
-                            </div>
-                            <div class="money-item paid">
-                                <div class="label">المدفوع</div>
-                                <div class="value">${parseFloat(proj.paid || 0).toLocaleString()} AED</div>
-                            </div>
-                            <div class="money-item ${remaining > 0 ? 'pending' : 'paid'}">
-                                <div class="label">المتبقي</div>
-                                <div class="value">${remaining.toLocaleString()} AED</div>
-                            </div>
-                        </div>
-                        
-                        <div class="project-payment-status">
-                            <span class="payment-badge ${paymentClass}">${paymentIcon} ${proj.payment || 'غير مدفوع'}</span>
-                        </div>
-                        
-                        <div class="card-footer">
-                            <button class="btn btn-ghost" onclick="event.stopPropagation(); deleteProject('${proj.id}')">🗑️</button>
-                            <button class="btn btn-ghost" onclick="event.stopPropagation(); editProject('${proj.id}')">✏️</button>
-                            <button class="btn btn-primary" onclick="event.stopPropagation(); recordPayment('${proj.id}')">💵 تسجيل دفعة</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function showProjectDetails(id) {
-            const proj = data.projects.find(p => p.id === id);
-            if (!proj) return;
-            
-            const remaining = (parseFloat(proj.value) || 0) - (parseFloat(proj.paid) || 0);
-            
-            document.getElementById('modal-title').textContent = proj.name;
-            document.getElementById('modal-body').innerHTML = `
-                <div class="project-detail-modal">
-                    <div class="detail-section">
-                        <h4>👤 معلومات العميل</h4>
-                        <p><strong>الاسم:</strong> ${proj.client || '-'}</p>
-                        <p><strong>الهاتف:</strong> ${proj.clientPhone ? `<a href="tel:${proj.clientPhone}">${proj.clientPhone}</a>` : '-'}</p>
-                        <p><strong>البريد:</strong> ${proj.clientEmail ? `<a href="mailto:${proj.clientEmail}">${proj.clientEmail}</a>` : '-'}</p>
-                    </div>
-                    <div class="detail-section">
-                        <h4>📋 تفاصيل المشروع</h4>
-                        <p><strong>النوع:</strong> ${proj.type || '-'}</p>
-                        <p><strong>المصدر:</strong> ${proj.source || '-'}</p>
-                        <p><strong>الحالة:</strong> ${proj.status || '-'}</p>
-                        <p><strong>نسبة الإنجاز:</strong> ${proj.progress || 0}%</p>
-                    </div>
-                    <div class="detail-section">
-                        <h4>📅 المواعيد</h4>
-                        <p><strong>تاريخ البداية:</strong> ${proj.startDate || '-'}</p>
-                        <p><strong>موعد التسليم:</strong> ${proj.deadline || '-'}</p>
-                        <p><strong>تم التسليم في:</strong> ${proj.delivered || '-'}</p>
-                    </div>
-                    <div class="detail-section">
-                        <h4>💰 المالية</h4>
-                        <p><strong>القيمة الإجمالية:</strong> ${parseFloat(proj.value || 0).toLocaleString()} AED</p>
-                        <p><strong>المدفوع:</strong> <span style="color: var(--success)">${parseFloat(proj.paid || 0).toLocaleString()} AED</span></p>
-                        <p><strong>المتبقي:</strong> <span style="color: ${remaining > 0 ? 'var(--warning)' : 'var(--success)'}">${remaining.toLocaleString()} AED</span></p>
-                        <p><strong>حالة الدفع:</strong> ${proj.payment || 'غير مدفوع'}</p>
-                    </div>
-                    ${proj.notes ? `<div class="detail-section"><h4>📝 ملاحظات</h4><p>${proj.notes}</p></div>` : ''}
-                </div>
-            `;
-            document.getElementById('modal').classList.add('active');
-        }
-        
-        function editProject(id) {
-            const proj = data.projects.find(p => p.id === id);
-            if (!proj) return;
-            
-            // Fill form with project data
-            document.getElementById('project-name').value = proj.name || '';
-            document.getElementById('project-client').value = proj.client || '';
-            document.getElementById('project-client-phone').value = proj.clientPhone || '';
-            document.getElementById('project-client-email').value = proj.clientEmail || '';
-            document.getElementById('project-type').value = proj.type || 'BOQ';
-            document.getElementById('project-source').value = proj.source || 'Direct';
-            document.getElementById('project-value').value = proj.value || '';
-            document.getElementById('project-paid').value = proj.paid || '';
-            document.getElementById('project-start').value = proj.startDate || '';
-            document.getElementById('project-deadline').value = proj.deadline || '';
-            document.getElementById('project-delivered').value = proj.delivered || '';
-            document.getElementById('project-status').value = proj.status || 'جديد';
-            document.getElementById('project-payment').value = proj.payment || 'غير مدفوع';
-            document.getElementById('project-progress').value = proj.progress || 0;
-            document.getElementById('progress-value').textContent = (proj.progress || 0) + '%';
-            document.getElementById('project-notes').value = proj.notes || '';
-            
-            // Mark as editing
-            document.getElementById('add-project-form').dataset.editId = id;
-            showAddProject();
-        }
-        
-        function recordPayment(id) {
-            const proj = data.projects.find(p => p.id === id);
-            if (!proj) return;
-            
-            const remaining = (parseFloat(proj.value) || 0) - (parseFloat(proj.paid) || 0);
-            const amount = prompt(`💵 أدخل مبلغ الدفعة (المتبقي: ${remaining.toLocaleString()} AED):`, remaining);
-            
-            if (amount !== null && !isNaN(amount) && parseFloat(amount) > 0) {
-                proj.paid = (parseFloat(proj.paid) || 0) + parseFloat(amount);
-                
-                // Auto update payment status
-                if (proj.paid >= proj.value) {
-                    proj.payment = 'مدفوع بالكامل';
-                } else if (proj.paid > 0) {
-                    proj.payment = 'جزئي';
-                }
-                
-                // Add to income
-                data.income.push({
-                    id: 'inc_' + Date.now(),
-                    desc: `دفعة من مشروع: ${proj.name}`,
-                    amount: parseFloat(amount),
-                    date: new Date().toISOString().split('T')[0],
-                    source: proj.client
-                });
-                
-                saveData();
-                renderProjects();
-                renderFinance();
-                showAchievement('💵 تم تسجيل الدفعة!');
-            }
-        }
-
-        function renderClients() {
-            const container = document.getElementById('clients-list');
-
-            if (data.clients.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">👥</div>
-                        <h3>لا يوجد عملاء</h3>
-                        <p>أضف عميلك الأول</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = data.clients.map(client => `
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-title">${client.name}</div>
-                            <div class="card-meta">${client.company || 'فردي'}</div>
-                        </div>
-                    </div>
-                    <div style="color: var(--text-dim); font-size: 0.9rem;">
-                        ${client.phone ? `📱 ${client.phone}` : ''}
-                        ${client.email ? `<br>📧 ${client.email}` : ''}
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-ghost" onclick="deleteClient('${client.id}')">🗑️ حذف</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderFinance() {
-            const totalIncome = data.income.reduce((sum, i) => sum + (parseFloat(i.amount) || 0), 0);
-            const totalExpenses = data.expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
-            const netProfit = totalIncome - totalExpenses;
-
-            document.getElementById('total-income').textContent = totalIncome.toLocaleString() + ' AED';
-            document.getElementById('total-expenses').textContent = totalExpenses.toLocaleString() + ' AED';
-            document.getElementById('net-profit').textContent = netProfit.toLocaleString() + ' AED';
-
-            const container = document.getElementById('transactions-list');
-            
-            const transactions = [
-                ...data.income.map(i => ({...i, type: 'income'})),
-                ...data.expenses.map(e => ({...e, type: 'expense'}))
-            ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
-
-            if (transactions.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">💰</div>
-                        <h3>لا توجد معاملات</h3>
-                        <p>أضف دخل أو مصروف</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = transactions.map(t => `
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-title">${t.desc}</div>
-                            <div class="card-meta">${t.date || 'غير محدد'}</div>
-                        </div>
-                        <span class="card-badge ${t.type === 'income' ? 'badge-good' : 'badge-hot'}">
-                            ${t.type === 'income' ? '💵 دخل' : '📤 مصروف'}
-                        </span>
-                    </div>
-                    <div class="card-price" style="color: ${t.type === 'income' ? 'var(--success)' : 'var(--danger)'}">
-                        ${t.type === 'income' ? '+' : '-'}${parseFloat(t.amount).toLocaleString()} AED
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // ===== OPPORTUNITY MODAL =====
-        function showOpportunity(id) {
-            const opp = data.opportunities.find(o => o.id === id);
+        function showProposal(oppId) {
+            const opp = appData.opportunities.find(o => o.id === oppId);
             if (!opp) return;
-
-            document.getElementById('modal-title').textContent = opp.title;
-            document.getElementById('modal-body').innerHTML = `
-                <div style="margin-bottom: 20px;">
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
-                        <span class="card-badge badge-new">${opp.platform}</span>
-                        <span class="card-badge badge-good">${opp.budget}</span>
-                        <span class="card-badge ${opp.successRate >= 70 ? 'badge-hot' : 'badge-pending'}">
-                            نسبة النجاح: ${opp.successRate}%
-                        </span>
-                    </div>
-                    ${opp.link ? `<a href="${opp.link}" target="_blank" class="btn btn-ghost" style="display: inline-block; margin-bottom: 15px;">🔗 فتح الفرصة</a>` : ''}
-                </div>
-                
-                <h4 style="margin-bottom: 10px;">📋 Proposal جاهز للنسخ:</h4>
-                <div class="proposal-box">${opp.proposal || 'لا يوجد proposal متاح'}</div>
-                
-                <button class="copy-btn" onclick="copyProposal('${id}')">
-                    📋 نسخ Proposal
-                </button>
-
-                ${opp.warnings ? `
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(239, 68, 68, 0.1); border-radius: 10px; border: 1px solid var(--danger);">
-                        <strong>⚠️ تحذيرات:</strong><br>
-                        ${opp.warnings}
-                    </div>
-                ` : ''}
+            
+            document.getElementById('modalTitle').textContent = currentLang === 'ar' ? 'العرض الجاهز' : 'Ready Proposal';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="proposal-text">${opp.proposal || 'No proposal generated yet.'}</div>
+                <button class="copy-btn" onclick="copyProposal(this, '${oppId}')" data-en="📋 Copy to Clipboard" data-ar="📋 نسخ">${currentLang === 'ar' ? '📋 نسخ' : '📋 Copy to Clipboard'}</button>
             `;
-            document.getElementById('modal').classList.add('active');
+            document.getElementById('modalOverlay').classList.add('active');
         }
-
-        function copyProposal(id) {
-            const opp = data.opportunities.find(o => o.id === id);
-            if (opp && opp.proposal) {
-                navigator.clipboard.writeText(opp.proposal);
-                const btn = document.querySelector('.copy-btn');
-                btn.textContent = '✅ تم النسخ!';
-                setTimeout(() => btn.textContent = '📋 نسخ Proposal', 2000);
+        
+        function copyProposal(btn, oppId) {
+            const opp = appData.opportunities.find(o => o.id === oppId);
+            navigator.clipboard.writeText(opp.proposal);
+            btn.textContent = currentLang === 'ar' ? '✓ تم النسخ!' : '✓ Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = currentLang === 'ar' ? '📋 نسخ' : '📋 Copy to Clipboard';
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+        
+        async function refreshOpportunities() {
+            try {
+                const res = await fetch('/api/search', { method: 'POST' });
+                const data = await res.json();
+                if (data.opportunities) {
+                    appData.opportunities = data.opportunities;
+                    saveData();
+                    renderOpportunities();
+                    updateStats();
+                }
+            } catch (e) {
+                console.error('Search failed:', e);
             }
         }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+        
+        // ===== PROJECTS =====
+        function renderProjects() {
+            const list = document.getElementById('projectList');
+            if (appData.projects.length === 0) {
+                list.innerHTML = `<div class="empty-state">
+                    <div class="empty-state-icon">📂</div>
+                    <div>${currentLang === 'ar' ? 'لا توجد مشاريع حتى الآن' : 'No projects yet'}</div>
+                </div>`;
+                return;
+            }
+            
+            list.innerHTML = appData.projects.map(p => `
+                <div class="project-item">
+                    <div class="project-header">
+                        <div class="project-name">${p.name}</div>
+                        <span class="project-status ${p.status}">${p.status}</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="project-detail">
+                            <span class="project-detail-label">${currentLang === 'ar' ? 'العميل' : 'Client'}</span>
+                            <span class="project-detail-value">${p.client}</span>
+                        </div>
+                        <div class="project-detail">
+                            <span class="project-detail-label">${currentLang === 'ar' ? 'الموعد النهائي' : 'Deadline'}</span>
+                            <span class="project-detail-value">${p.deadline}</span>
+                        </div>
+                        <div class="project-detail">
+                            <span class="project-detail-label">${currentLang === 'ar' ? 'التسليم' : 'Delivery'}</span>
+                            <span class="project-detail-value">${p.delivery || '-'}</span>
+                        </div>
+                        <div class="project-detail">
+                            <span class="project-detail-label">${currentLang === 'ar' ? 'الدفع' : 'Payment'}</span>
+                            <span class="payment-status ${p.payment}">${p.payment}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
-
-        // ===== PROJECT FUNCTIONS =====
+        
         function showAddProject() {
-            document.getElementById('add-project-form').classList.add('active');
+            document.getElementById('modalTitle').textContent = currentLang === 'ar' ? 'إضافة مشروع' : 'Add Project';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'اسم المشروع' : 'Project Name'}</label>
+                    <input type="text" class="form-input" id="projName">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'العميل' : 'Client'}</label>
+                    <input type="text" class="form-input" id="projClient">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'الموعد النهائي' : 'Deadline'}</label>
+                    <input type="date" class="form-input" id="projDeadline">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'حالة الدفع' : 'Payment Status'}</label>
+                    <select class="form-select" id="projPayment">
+                        <option value="pending">${currentLang === 'ar' ? 'قيد الانتظار' : 'Pending'}</option>
+                        <option value="paid">${currentLang === 'ar' ? 'مدفوع' : 'Paid'}</option>
+                        <option value="unpaid">${currentLang === 'ar' ? 'غير مدفوع' : 'Unpaid'}</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addProject()" style="width:100%">${currentLang === 'ar' ? 'إضافة' : 'Add'}</button>
+            `;
+            document.getElementById('modalOverlay').classList.add('active');
         }
-
-        function hideAddProject() {
-            document.getElementById('add-project-form').classList.remove('active');
-        }
-
+        
         function addProject() {
             const project = {
-                id: 'proj_' + Date.now(),
-                name: document.getElementById('project-name').value,
-                client: document.getElementById('project-client').value,
-                type: document.getElementById('project-type').value,
-                value: document.getElementById('project-value').value,
-                startDate: document.getElementById('project-start').value,
-                endDate: document.getElementById('project-end').value,
-                status: document.getElementById('project-status').value,
-                progress: 0
+                id: Date.now().toString(),
+                name: document.getElementById('projName').value,
+                client: document.getElementById('projClient').value,
+                deadline: document.getElementById('projDeadline').value,
+                delivery: '',
+                payment: document.getElementById('projPayment').value,
+                status: 'active'
             };
-
-            if (!project.name) {
-                alert('الرجاء إدخال اسم المشروع');
+            appData.projects.push(project);
+            saveData();
+            renderProjects();
+            updateStats();
+            closeModal();
+        }
+        
+        // ===== CLIENTS =====
+        function renderClients() {
+            const list = document.getElementById('clientList');
+            if (appData.clients.length === 0) {
+                list.innerHTML = `<div class="empty-state">
+                    <div class="empty-state-icon">👤</div>
+                    <div>${currentLang === 'ar' ? 'لا يوجد عملاء حتى الآن' : 'No clients yet'}</div>
+                </div>`;
                 return;
             }
-
-            data.projects.push(project);
-            saveData();
-            renderAll();
-            hideAddProject();
-
-            // Clear form
-            document.getElementById('project-name').value = '';
-            document.getElementById('project-client').value = '';
-            document.getElementById('project-value').value = '';
+            
+            list.innerHTML = appData.clients.map(c => `
+                <div class="project-item">
+                    <div class="project-header">
+                        <div class="project-name">${c.name}</div>
+                    </div>
+                    <div class="project-details">
+                        <div class="project-detail">
+                            <span class="project-detail-label">${currentLang === 'ar' ? 'الإيميل' : 'Email'}</span>
+                            <span class="project-detail-value">${c.email || '-'}</span>
+                        </div>
+                        <div class="project-detail">
+                            <span class="project-detail-label">${currentLang === 'ar' ? 'الهاتف' : 'Phone'}</span>
+                            <span class="project-detail-value">${c.phone || '-'}</span>
+                        </div>
+                        <div class="project-detail">
+                            <span class="project-detail-label">${currentLang === 'ar' ? 'المشاريع' : 'Projects'}</span>
+                            <span class="project-detail-value">${appData.projects.filter(p => p.client === c.name).length}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
-
-        function deleteProject(id) {
-            if (confirm('هل تريد حذف هذا المشروع؟')) {
-                data.projects = data.projects.filter(p => p.id !== id);
-                saveData();
-                renderAll();
-            }
-        }
-
-        function updateProjectProgress(id) {
-            const newProgress = prompt('أدخل نسبة التقدم الجديدة (0-100):');
-            if (newProgress !== null) {
-                const proj = data.projects.find(p => p.id === id);
-                if (proj) {
-                    proj.progress = Math.min(100, Math.max(0, parseInt(newProgress) || 0));
-                    if (proj.progress === 100) proj.status = 'مكتمل';
-                    saveData();
-                    renderAll();
-                }
-            }
-        }
-
-        // ===== CLIENT FUNCTIONS =====
+        
         function showAddClient() {
-            document.getElementById('add-client-form').classList.add('active');
+            document.getElementById('modalTitle').textContent = currentLang === 'ar' ? 'إضافة عميل' : 'Add Client';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'الاسم' : 'Name'}</label>
+                    <input type="text" class="form-input" id="clientName">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'الإيميل' : 'Email'}</label>
+                    <input type="email" class="form-input" id="clientEmail">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'الهاتف' : 'Phone'}</label>
+                    <input type="tel" class="form-input" id="clientPhone">
+                </div>
+                <button class="btn btn-primary" onclick="addClient()" style="width:100%">${currentLang === 'ar' ? 'إضافة' : 'Add'}</button>
+            `;
+            document.getElementById('modalOverlay').classList.add('active');
         }
-
-        function hideAddClient() {
-            document.getElementById('add-client-form').classList.remove('active');
-        }
-
+        
         function addClient() {
             const client = {
-                id: 'client_' + Date.now(),
-                name: document.getElementById('client-name').value,
-                company: document.getElementById('client-company').value,
-                phone: document.getElementById('client-phone').value,
-                email: document.getElementById('client-email').value
+                id: Date.now().toString(),
+                name: document.getElementById('clientName').value,
+                email: document.getElementById('clientEmail').value,
+                phone: document.getElementById('clientPhone').value
             };
-
-            if (!client.name) {
-                alert('الرجاء إدخال اسم العميل');
-                return;
-            }
-
-            data.clients.push(client);
+            appData.clients.push(client);
             saveData();
-            renderAll();
-            hideAddClient();
-
-            // Clear form
-            document.getElementById('client-name').value = '';
-            document.getElementById('client-company').value = '';
-            document.getElementById('client-phone').value = '';
-            document.getElementById('client-email').value = '';
+            renderClients();
+            closeModal();
         }
-
-        function deleteClient(id) {
-            if (confirm('هل تريد حذف هذا العميل؟')) {
-                data.clients = data.clients.filter(c => c.id !== id);
-                saveData();
-                renderAll();
-            }
-        }
-
-        // ===== FINANCE FUNCTIONS =====
-        function showAddIncome() {
-            document.getElementById('add-income-form').classList.add('active');
-            document.getElementById('add-expense-form').classList.remove('active');
-        }
-
-        function hideAddIncome() {
-            document.getElementById('add-income-form').classList.remove('active');
-        }
-
-        function showAddExpense() {
-            document.getElementById('add-expense-form').classList.add('active');
-            document.getElementById('add-income-form').classList.remove('active');
-        }
-
-        function hideAddExpense() {
-            document.getElementById('add-expense-form').classList.remove('active');
-        }
-
-        function addIncome() {
-            const income = {
-                id: 'inc_' + Date.now(),
-                desc: document.getElementById('income-desc').value,
-                amount: document.getElementById('income-amount').value,
-                date: document.getElementById('income-date').value,
-                source: document.getElementById('income-source').value
-            };
-
-            if (!income.desc || !income.amount) {
-                alert('الرجاء إدخال الوصف والمبلغ');
-                return;
-            }
-
-            data.income.push(income);
-            saveData();
-            renderAll();
-            hideAddIncome();
-
-            // Clear form
-            document.getElementById('income-desc').value = '';
-            document.getElementById('income-amount').value = '';
-            document.getElementById('income-date').value = '';
-            document.getElementById('income-source').value = '';
-        }
-
-        function addExpense() {
-            const expense = {
-                id: 'exp_' + Date.now(),
-                desc: document.getElementById('expense-desc').value,
-                amount: document.getElementById('expense-amount').value,
-                date: document.getElementById('expense-date').value,
-                category: document.getElementById('expense-category').value
-            };
-
-            if (!expense.desc || !expense.amount) {
-                alert('الرجاء إدخال الوصف والمبلغ');
-                return;
-            }
-
-            data.expenses.push(expense);
-            saveData();
-            renderAll();
-            hideAddExpense();
-
-            // Clear form
-            document.getElementById('expense-desc').value = '';
-            document.getElementById('expense-amount').value = '';
-            document.getElementById('expense-date').value = '';
-        }
-
+        
         // ===== CALCULATOR =====
-        const rates = {
-            excavation: 50,
-            concrete: 350,
-            blocks: 45,
-            plaster: 25,
-            tiles: 85,
-            paint: 15
-        };
-
-        const units = {
-            excavation: 'م³',
-            concrete: 'م³',
-            blocks: 'م²',
-            plaster: 'م²',
-            tiles: 'م²',
-            paint: 'م²'
-        };
-
-        function updateCalc() {
-            const type = document.getElementById('calc-type').value;
-            const length = parseFloat(document.getElementById('calc-length').value) || 0;
-            const width = parseFloat(document.getElementById('calc-width').value) || 0;
-            const height = parseFloat(document.getElementById('calc-height').value) || 0;
-
-            let quantity;
-            if (['excavation', 'concrete'].includes(type)) {
-                quantity = length * width * height;
-            } else {
-                quantity = length * width;
-            }
-
-            const cost = quantity * rates[type];
-
-            document.getElementById('calc-quantity').textContent = 
-                quantity.toLocaleString() + ' ' + units[type];
-            document.getElementById('calc-cost').textContent = 
-                cost.toLocaleString() + ' AED';
+        function calcConcrete() {
+            const l = parseFloat(document.getElementById('concLength').value) || 0;
+            const w = parseFloat(document.getElementById('concWidth').value) || 0;
+            const h = parseFloat(document.getElementById('concHeight').value) || 0;
+            const vol = (l * w * h).toFixed(2);
+            document.getElementById('concResult').textContent = vol + ' m³';
         }
-
-        function updateProjectEstimate() {
-            const type = document.getElementById('proj-type').value;
-            const area = parseFloat(document.getElementById('proj-area').value) || 0;
-            const finish = document.getElementById('proj-finish').value;
-
-            const baseRates = {
-                villa: 1500,
-                building: 1200,
-                commercial: 1800
-            };
-
-            const finishMultiplier = {
-                standard: 1,
-                luxury: 1.5,
-                super: 2
-            };
-
-            const estimate = area * baseRates[type] * finishMultiplier[finish];
-            document.getElementById('proj-estimate').textContent = 
-                estimate.toLocaleString() + ' AED';
+        
+        function calcSteel() {
+            const d = parseFloat(document.getElementById('steelDia').value) || 0;
+            const l = parseFloat(document.getElementById('steelLength').value) || 0;
+            const q = parseFloat(document.getElementById('steelQty').value) || 1;
+            const weight = ((d * d / 162) * l * q).toFixed(2);
+            document.getElementById('steelResult').textContent = weight + ' kg';
         }
-
-        // ===== INIT =====
-        document.addEventListener('DOMContentLoaded', () => {
-            loadData();
-            updateCalc();
-            updateProjectEstimate();
-        });
-
-        // Close modal on outside click
-        document.getElementById('modal').addEventListener('click', (e) => {
-            if (e.target.id === 'modal') closeModal();
-        });
-
+        
+        function calcBlocks() {
+            const l = parseFloat(document.getElementById('wallLength').value) || 0;
+            const h = parseFloat(document.getElementById('wallHeight').value) || 0;
+            const blocks = Math.ceil((l * h) / 0.08);
+            document.getElementById('blockResult').textContent = blocks + ' blocks';
+        }
+        
+        function calcPaint() {
+            const l = parseFloat(document.getElementById('paintLength').value) || 0;
+            const h = parseFloat(document.getElementById('paintHeight').value) || 0;
+            const c = parseFloat(document.getElementById('paintCoats').value) || 2;
+            const area = l * h * c;
+            const liters = (area / 10).toFixed(1);
+            document.getElementById('paintResult').textContent = area.toFixed(0) + ' m² | ' + liters + ' L';
+        }
+        
         // ===== AI AGENT =====
-        const AI_API_URL = '/api/chat';
-        let aiMessages = [];
-
         function toggleAI() {
-            const panel = document.getElementById('ai-panel');
-            const toggle = document.getElementById('ai-toggle');
-            panel.classList.toggle('active');
-            toggle.classList.toggle('active');
+            document.getElementById('aiPanel').classList.toggle('active');
+        }
+        
+        async function sendAI() {
+            const input = document.getElementById('aiInput');
+            const msg = input.value.trim();
+            if (!msg) return;
             
-            if (panel.classList.contains('active')) {
-                toggle.innerHTML = '✕';
-                document.getElementById('ai-input').focus();
-                
-                // Show welcome message if first time
-                if (aiMessages.length === 0) {
-                    addAIMessage('agent', `🏗️ QS Empire Agent | Online
-
-▸ Status: Operational
-▸ Mode: Professional Assistant
-
-Capabilities:
-• Quantity calculations & BOQ
-• Cost estimation & pricing
-• Proposal generation
-• Market rate analysis
-
-Enter your request.`);
-                }
-            } else {
-                toggle.innerHTML = '🤖';
-            }
-        }
-
-        function addAIMessage(type, text) {
-            const container = document.getElementById('ai-messages');
-            const msg = document.createElement('div');
-            msg.className = 'ai-message ' + type;
-            msg.textContent = text;
-            container.appendChild(msg);
-            container.scrollTop = container.scrollHeight;
-            aiMessages.push({ type, text });
-        }
-
-        function showTyping() {
-            const container = document.getElementById('ai-messages');
-            const typing = document.createElement('div');
-            typing.className = 'ai-message typing';
-            typing.id = 'typing-indicator';
-            typing.textContent = 'Processing';
-            container.appendChild(typing);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function hideTyping() {
-            const typing = document.getElementById('typing-indicator');
-            if (typing) typing.remove();
-        }
-
-        async function sendAIMessage() {
-            const input = document.getElementById('ai-input');
-            const sendBtn = document.getElementById('ai-send');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            // Add user message
-            addAIMessage('user', message);
+            addAIMessage(msg, 'user');
             input.value = '';
-            sendBtn.disabled = true;
-            
-            // Show typing
-            showTyping();
             
             try {
-                const response = await fetch(AI_API_URL, {
+                const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
+                    body: JSON.stringify({ message: msg, lang: currentLang })
                 });
-                
-                const data = await response.json();
-                hideTyping();
-                
-                if (data.success && data.reply) {
-                    addAIMessage('agent', data.reply);
-                } else {
-                    addAIMessage('agent', '⚠ Processing error. Retry or rephrase request.');
-                }
-            } catch (error) {
-                hideTyping();
-                addAIMessage('agent', '⚠ Connection failed. Check network and retry.');
+                const data = await res.json();
+                addAIMessage(data.response || 'Sorry, I could not process that.', 'agent');
+            } catch (e) {
+                addAIMessage(currentLang === 'ar' ? 'عذراً، حدث خطأ. حاول مرة أخرى.' : 'Sorry, an error occurred. Please try again.', 'agent');
             }
-            
-            sendBtn.disabled = false;
         }
-
-        function aiQuickAction(action) {
-            const input = document.getElementById('ai-input');
-            input.value = action;
-            sendAIMessage();
+        
+        function addAIMessage(text, type) {
+            const container = document.getElementById('aiMessages');
+            const div = document.createElement('div');
+            div.className = 'ai-message ' + type;
+            div.textContent = text;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
         }
-
-        // Enter key to send
-        document.getElementById('ai-input')?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendAIMessage();
-            }
+        
+        function aiQuick(action) {
+            const messages = {
+                search: currentLang === 'ar' ? 'ابحث عن فرص جديدة في Upwork و Freelancer' : 'Search for new opportunities on Upwork and Freelancer',
+                proposal: currentLang === 'ar' ? 'اكتب لي proposal احترافي لمشروع حصر كميات' : 'Write me a professional proposal for a quantity takeoff project',
+                price: currentLang === 'ar' ? 'اقترح سعر مناسب لمشروع BOQ لفيلا 500 متر' : 'Suggest a suitable price for a BOQ project for a 500m² villa'
+            };
+            document.getElementById('aiInput').value = messages[action];
+            sendAI();
+        }
+        
+        document.getElementById('aiInput').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') sendAI();
         });
+        
+        // ===== MODAL =====
+        function closeModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        
+        // ===== INIT =====
+        checkAuth();
+        applyLanguage();
+        
+        // PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
     </script>
-
-    <!-- AI Agent Toggle Button -->
-    <button class="ai-toggle" id="ai-toggle" onclick="toggleAI()">🤖</button>
-
-    <!-- AI Agent Panel -->
-    <div class="ai-panel" id="ai-panel">
-        <div class="ai-header">
-            <div class="ai-header-icon">🤖</div>
-            <div class="ai-header-info">
-                <h3>QS Empire Agent</h3>
-                <span>Professional AI Assistant</span>
-            </div>
-            <div class="ai-status">
-                <div class="ai-status-dot"></div>
-                Online
-            </div>
-        </div>
-        
-        <div class="ai-messages" id="ai-messages"></div>
-        
-        <div class="ai-quick-actions">
-            <button class="ai-quick-btn" onclick="aiQuickAction('بحث عن فرص جديدة')">🔍 بحث فرص</button>
-            <button class="ai-quick-btn" onclick="aiQuickAction('Calculate concrete 10x15x0.3')">📐 حساب</button>
-            <button class="ai-quick-btn" onclick="aiQuickAction('اكتب proposal احترافي')">📝 Proposal</button>
-            <button class="ai-quick-btn" onclick="aiQuickAction('Market rates UAE 2025')">💰 أسعار</button>
-        </div>
-        
-        <div class="ai-input-area">
-            <textarea class="ai-input" id="ai-input" placeholder="Enter your request..." rows="1"></textarea>
-            <button class="ai-send" id="ai-send" onclick="sendAIMessage()">➤</button>
-        </div>
-    </div>
 </body>
 </html>
