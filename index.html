@@ -915,6 +915,36 @@
         }
         
         /* ===== CALCULATOR ===== */
+        .calc-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .calc-tab {
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .calc-tab.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green-light);
+        }
+        
+        .calc-tab-content {
+            display: none;
+        }
+        
+        .calc-tab-content.active {
+            display: block;
+        }
+        
         .calc-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1118,48 +1148,193 @@
             
             <!-- CALCULATOR -->
             <section class="section" id="calculator">
-                <div class="calc-grid">
-                    <div class="calc-item">
-                        <div class="calc-item-title">🧱 <span data-en="Concrete Volume" data-ar="حجم الخرسانة">Concrete Volume</span></div>
-                        <div class="calc-row">
-                            <input type="number" class="calc-input" id="concLength" placeholder="Length (m)">
-                            <input type="number" class="calc-input" id="concWidth" placeholder="Width (m)">
-                            <input type="number" class="calc-input" id="concHeight" placeholder="Height (m)">
+                <!-- Calculator Tabs -->
+                <div class="calc-tabs">
+                    <button class="calc-tab active" onclick="showCalcTab('basic')" data-en="🧮 Basic" data-ar="🧮 حسابات">🧮 Basic</button>
+                    <button class="calc-tab" onclick="showCalcTab('boq')" data-en="📋 BOQ" data-ar="📋 جدول الكميات">📋 BOQ</button>
+                    <button class="calc-tab" onclick="showCalcTab('rates')" data-en="💰 UAE Rates" data-ar="💰 أسعار الإمارات">💰 UAE Rates</button>
+                    <button class="calc-tab" onclick="showCalcTab('quick')" data-en="⚡ Quick Est." data-ar="⚡ تقدير سريع">⚡ Quick Est.</button>
+                </div>
+                
+                <!-- BASIC CALCULATORS -->
+                <div class="calc-tab-content active" id="calcBasic">
+                    <div class="calc-grid">
+                        <div class="calc-item">
+                            <div class="calc-item-title">🧱 <span data-en="Concrete Volume" data-ar="حجم الخرسانة">Concrete Volume</span></div>
+                            <div class="calc-row">
+                                <input type="number" class="calc-input" id="concLength" placeholder="Length (m)">
+                                <input type="number" class="calc-input" id="concWidth" placeholder="Width (m)">
+                                <input type="number" class="calc-input" id="concHeight" placeholder="Height (m)">
+                            </div>
+                            <button class="btn btn-primary" onclick="calcConcrete()" style="width:100%">Calculate</button>
+                            <div class="calc-result" id="concResult">0 m³</div>
                         </div>
-                        <button class="btn btn-primary" onclick="calcConcrete()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
-                        <div class="calc-result" id="concResult">0 m³</div>
+                        <div class="calc-item">
+                            <div class="calc-item-title">🔩 <span data-en="Steel Weight" data-ar="وزن الحديد">Steel Weight</span></div>
+                            <div class="calc-row">
+                                <input type="number" class="calc-input" id="steelDia" placeholder="Dia (mm)">
+                                <input type="number" class="calc-input" id="steelLength" placeholder="Length (m)">
+                                <input type="number" class="calc-input" id="steelQty" placeholder="Qty">
+                            </div>
+                            <button class="btn btn-primary" onclick="calcSteel()" style="width:100%">Calculate</button>
+                            <div class="calc-result" id="steelResult">0 kg</div>
+                        </div>
+                        <div class="calc-item">
+                            <div class="calc-item-title">🏗️ <span data-en="Block Work" data-ar="البلوك">Block Work</span></div>
+                            <div class="calc-row">
+                                <input type="number" class="calc-input" id="wallLength" placeholder="Length (m)">
+                                <input type="number" class="calc-input" id="wallHeight" placeholder="Height (m)">
+                            </div>
+                            <button class="btn btn-primary" onclick="calcBlocks()" style="width:100%">Calculate</button>
+                            <div class="calc-result" id="blockResult">0 blocks</div>
+                        </div>
+                        <div class="calc-item">
+                            <div class="calc-item-title">🎨 <span data-en="Paint Area" data-ar="مساحة الدهان">Paint Area</span></div>
+                            <div class="calc-row">
+                                <input type="number" class="calc-input" id="paintLength" placeholder="Length (m)">
+                                <input type="number" class="calc-input" id="paintHeight" placeholder="Height (m)">
+                            </div>
+                            <button class="btn btn-primary" onclick="calcPaint()" style="width:100%">Calculate</button>
+                            <div class="calc-result" id="paintResult">0 m² | 0 L</div>
+                        </div>
                     </div>
-                    
-                    <div class="calc-item">
-                        <div class="calc-item-title">🔩 <span data-en="Steel Weight" data-ar="وزن الحديد">Steel Weight</span></div>
-                        <div class="calc-row">
-                            <input type="number" class="calc-input" id="steelDia" placeholder="Diameter (mm)">
-                            <input type="number" class="calc-input" id="steelLength" placeholder="Length (m)">
-                            <input type="number" class="calc-input" id="steelQty" placeholder="Quantity">
+                </div>
+                
+                <!-- BOQ TABLE -->
+                <div class="calc-tab-content" id="calcBoq">
+                    <div class="card">
+                        <div class="card-header">
+                            <input type="text" id="boqProjectName" class="calc-input" placeholder="Project Name" style="max-width:300px">
+                            <div style="display:flex;gap:8px">
+                                <button class="btn btn-primary" onclick="exportBOQ()">📥 Excel</button>
+                                <button class="btn" onclick="printBOQ()">🖨️ Print</button>
+                                <button class="btn" onclick="clearBOQ()" style="background:var(--accent-red)">🗑️</button>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" onclick="calcSteel()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
-                        <div class="calc-result" id="steelResult">0 kg</div>
+                        <!-- Add Item Form -->
+                        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:8px;margin-bottom:16px;align-items:end">
+                            <div>
+                                <label style="font-size:12px;color:var(--text-secondary)">Description</label>
+                                <input type="text" id="boqDesc" class="calc-input" placeholder="Work description">
+                            </div>
+                            <div>
+                                <label style="font-size:12px;color:var(--text-secondary)">Qty</label>
+                                <input type="number" id="boqQty" class="calc-input" placeholder="0">
+                            </div>
+                            <div>
+                                <label style="font-size:12px;color:var(--text-secondary)">Unit</label>
+                                <select id="boqUnit" class="calc-input">
+                                    <option>m²</option><option>m³</option><option>m</option><option>kg</option><option>ton</option><option>no.</option><option>point</option><option>LS</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size:12px;color:var(--text-secondary)">Rate (AED)</label>
+                                <input type="number" id="boqRate" class="calc-input" placeholder="0">
+                            </div>
+                            <div>
+                                <label style="font-size:12px;color:var(--text-secondary)">Amount</label>
+                                <input type="text" id="boqAmount" class="calc-input" readonly placeholder="0.00">
+                            </div>
+                            <button class="btn btn-primary" onclick="addBOQItem()" style="height:42px">+ Add</button>
+                        </div>
+                        <!-- BOQ Table -->
+                        <div style="overflow-x:auto">
+                            <table id="boqTable" style="width:100%;border-collapse:collapse;font-size:14px">
+                                <thead>
+                                    <tr style="background:var(--bg-secondary);text-align:left">
+                                        <th style="padding:12px;border:1px solid var(--border)">#</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Description</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Qty</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Unit</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Rate</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Amount</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="boqBody"></tbody>
+                                <tfoot>
+                                    <tr style="background:var(--bg-secondary);font-weight:700">
+                                        <td colspan="5" style="padding:12px;border:1px solid var(--border);text-align:right">Subtotal:</td>
+                                        <td colspan="2" style="padding:12px;border:1px solid var(--border)" id="boqSubtotal">0.00 AED</td>
+                                    </tr>
+                                    <tr style="background:var(--accent-green);font-weight:700">
+                                        <td colspan="5" style="padding:12px;border:1px solid var(--border);text-align:right">+ 10% Contingency = Total:</td>
+                                        <td colspan="2" style="padding:12px;border:1px solid var(--border)" id="boqTotal">0.00 AED</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
-                    
-                    <div class="calc-item">
-                        <div class="calc-item-title">🏗️ <span data-en="Block Work" data-ar="البلوك">Block Work</span></div>
-                        <div class="calc-row">
-                            <input type="number" class="calc-input" id="wallLength" placeholder="Length (m)">
-                            <input type="number" class="calc-input" id="wallHeight" placeholder="Height (m)">
+                </div>
+                
+                <!-- UAE MARKET RATES -->
+                <div class="calc-tab-content" id="calcRates">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">💰 UAE Market Rates 2024-2025</div>
+                            <input type="text" id="ratesSearch" class="calc-input" placeholder="🔍 Search..." style="max-width:250px" oninput="filterRates()">
                         </div>
-                        <button class="btn btn-primary" onclick="calcBlocks()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
-                        <div class="calc-result" id="blockResult">0 blocks</div>
+                        <div style="overflow-x:auto">
+                            <table style="width:100%;border-collapse:collapse;font-size:14px">
+                                <thead>
+                                    <tr style="background:var(--bg-secondary);text-align:left">
+                                        <th style="padding:12px;border:1px solid var(--border)">Item</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Unit</th>
+                                        <th style="padding:12px;border:1px solid var(--border);color:#3b82f6">Min (AED)</th>
+                                        <th style="padding:12px;border:1px solid var(--border);color:#16a34a">Avg (AED)</th>
+                                        <th style="padding:12px;border:1px solid var(--border);color:#ef4444">Max (AED)</th>
+                                        <th style="padding:12px;border:1px solid var(--border)">Add to BOQ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ratesBody"></tbody>
+                            </table>
+                        </div>
                     </div>
-                    
-                    <div class="calc-item">
-                        <div class="calc-item-title">🎨 <span data-en="Paint Area" data-ar="مساحة الدهان">Paint Area</span></div>
-                        <div class="calc-row">
-                            <input type="number" class="calc-input" id="paintLength" placeholder="Length (m)">
-                            <input type="number" class="calc-input" id="paintHeight" placeholder="Height (m)">
-                            <input type="number" class="calc-input" id="paintCoats" placeholder="Coats" value="2">
+                </div>
+                
+                <!-- QUICK ESTIMATE -->
+                <div class="calc-tab-content" id="calcQuick">
+                    <div class="calc-grid">
+                        <div class="calc-item">
+                            <div class="calc-item-title">⚡ <span data-en="Quick Project Estimate" data-ar="تقدير سريع للمشروع">Quick Project Estimate</span></div>
+                            <div style="display:grid;gap:12px">
+                                <div>
+                                    <label style="font-size:12px;color:var(--text-secondary)">Project Type</label>
+                                    <select id="quickType" class="calc-input" style="width:100%">
+                                        <option value="villa">Villa / فيلا</option>
+                                        <option value="apartment">Apartment / شقة</option>
+                                        <option value="office">Office / مكتب</option>
+                                        <option value="retail">Retail / محل تجاري</option>
+                                        <option value="warehouse">Warehouse / مستودع</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;color:var(--text-secondary)">Built-up Area (m²)</label>
+                                    <input type="number" id="quickArea" class="calc-input" placeholder="e.g. 500">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;color:var(--text-secondary)">Number of Floors</label>
+                                    <input type="number" id="quickFloors" class="calc-input" placeholder="e.g. 2" value="1">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;color:var(--text-secondary)">Quality Level</label>
+                                    <select id="quickQuality" class="calc-input" style="width:100%">
+                                        <option value="standard">Standard / عادي</option>
+                                        <option value="good">Good / جيد</option>
+                                        <option value="premium">Premium / فاخر</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="quickEstimate()" style="width:100%;padding:14px">⚡ Calculate Estimate</button>
+                            </div>
+                            <div class="calc-result" id="quickResult" style="margin-top:16px;display:none">
+                                <div id="quickResultText"></div>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" onclick="calcPaint()" style="width:100%" data-en="Calculate" data-ar="احسب">Calculate</button>
-                        <div class="calc-result" id="paintResult">0 m² | 0 L</div>
+                        <div class="calc-item" id="quickBreakdown" style="display:none">
+                            <div class="calc-item-title">📊 <span data-en="Cost Breakdown" data-ar="تفصيل التكلفة">Cost Breakdown</span></div>
+                            <div id="quickBreakdownList"></div>
+                            <button class="btn btn-primary" onclick="generateQuickBOQ()" style="width:100%;margin-top:16px">📋 Generate Full BOQ</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1565,6 +1740,232 @@
             const area = l * h * c;
             const liters = (area / 10).toFixed(1);
             document.getElementById('paintResult').textContent = area.toFixed(0) + ' m² | ' + liters + ' L';
+        }
+        
+        // ===== CALCULATOR TABS =====
+        function showCalcTab(tab) {
+            document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.calc-tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('calc' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+            if (tab === 'rates') renderRates();
+            if (tab === 'boq') renderBOQ();
+        }
+        
+        // ===== UAE MARKET RATES =====
+        const UAE_RATES = {
+            excavation: { name: "Excavation / حفر", unit: "m³", min: 25, avg: 35, max: 50 },
+            backfill: { name: "Backfill / ردم", unit: "m³", min: 20, avg: 30, max: 45 },
+            plain_concrete: { name: "Plain Concrete / خرسانة عادية", unit: "m³", min: 350, avg: 420, max: 500 },
+            rc_foundations: { name: "RC Foundations / أساسات مسلحة", unit: "m³", min: 500, avg: 600, max: 720 },
+            rc_columns: { name: "RC Columns / أعمدة مسلحة", unit: "m³", min: 550, avg: 650, max: 780 },
+            rc_slabs: { name: "RC Slabs / بلاطات مسلحة", unit: "m³", min: 520, avg: 620, max: 750 },
+            rc_beams: { name: "RC Beams / كمرات مسلحة", unit: "m³", min: 580, avg: 680, max: 780 },
+            rebar_sf: { name: "Steel Rebar S&F / حديد توريد وتركيب", unit: "ton", min: 3200, avg: 3600, max: 4000 },
+            rebar_supply: { name: "Steel Rebar Supply / حديد توريد", unit: "ton", min: 2600, avg: 2900, max: 3200 },
+            block_20: { name: "Block 20cm / بلوك 20 سم", unit: "m²", min: 65, avg: 78, max: 90 },
+            block_15: { name: "Block 15cm / بلوك 15 سم", unit: "m²", min: 55, avg: 65, max: 75 },
+            block_10: { name: "Block 10cm / بلوك 10 سم", unit: "m²", min: 45, avg: 52, max: 60 },
+            plaster_int: { name: "Internal Plaster / لياسة داخلية", unit: "m²", min: 25, avg: 32, max: 40 },
+            plaster_ext: { name: "External Plaster / لياسة خارجية", unit: "m²", min: 35, avg: 45, max: 55 },
+            ceramic_floor: { name: "Ceramic Floor / سيراميك أرضيات", unit: "m²", min: 80, avg: 115, max: 150 },
+            ceramic_wall: { name: "Ceramic Wall / سيراميك حوائط", unit: "m²", min: 85, avg: 122, max: 160 },
+            porcelain: { name: "Porcelain / بورسلين", unit: "m²", min: 120, avg: 185, max: 250 },
+            marble: { name: "Marble / رخام", unit: "m²", min: 200, avg: 350, max: 500 },
+            granite: { name: "Granite / جرانيت", unit: "m²", min: 180, avg: 290, max: 400 },
+            paint_int: { name: "Internal Paint / دهان داخلي", unit: "m²", min: 12, avg: 17, max: 22 },
+            paint_ext: { name: "External Paint / دهان خارجي", unit: "m²", min: 18, avg: 24, max: 30 },
+            paint_epoxy: { name: "Epoxy Paint / دهان إيبوكسي", unit: "m²", min: 45, avg: 62, max: 80 },
+            wp_bitumen: { name: "Waterproof Bitumen / عزل بيتومين", unit: "m²", min: 35, avg: 48, max: 60 },
+            wp_membrane: { name: "Waterproof Membrane / عزل ممبرين", unit: "m²", min: 50, avg: 70, max: 90 },
+            insulation: { name: "Thermal Insulation / عزل حراري", unit: "m²", min: 25, avg: 38, max: 50 },
+            door_internal: { name: "Internal Wood Door / باب داخلي", unit: "no.", min: 800, avg: 1150, max: 1500 },
+            door_main: { name: "Main Door / باب رئيسي", unit: "no.", min: 2000, avg: 3500, max: 5000 },
+            door_alu: { name: "Aluminum Door / باب ألمنيوم", unit: "m²", min: 350, avg: 475, max: 600 },
+            window_alu: { name: "Aluminum Window / نافذة ألمنيوم", unit: "m²", min: 300, avg: 425, max: 550 },
+            window_upvc: { name: "UPVC Window / نافذة UPVC", unit: "m²", min: 400, avg: 550, max: 700 },
+            ceiling_gypsum: { name: "Gypsum Ceiling / سقف جبس", unit: "m²", min: 55, avg: 72, max: 90 },
+            ceiling_mineral: { name: "Mineral Ceiling / سقف معدني", unit: "m²", min: 65, avg: 88, max: 110 },
+            formwork_found: { name: "Foundation Formwork / شدة أساسات", unit: "m²", min: 45, avg: 58, max: 70 },
+            formwork_col: { name: "Column Formwork / شدة أعمدة", unit: "m²", min: 55, avg: 70, max: 85 },
+            formwork_slab: { name: "Slab Formwork / شدة بلاطات", unit: "m²", min: 50, avg: 65, max: 80 },
+            elec_point: { name: "Electrical Point / نقطة كهرباء", unit: "point", min: 150, avg: 215, max: 280 },
+            plumb_point: { name: "Plumbing Point / نقطة صحي", unit: "point", min: 200, avg: 300, max: 400 },
+            ac_split: { name: "Split AC / تكييف سبليت", unit: "ton", min: 1800, avg: 2300, max: 2800 }
+        };
+        
+        function renderRates() {
+            const tbody = document.getElementById('ratesBody');
+            const search = (document.getElementById('ratesSearch').value || '').toLowerCase();
+            tbody.innerHTML = '';
+            Object.entries(UAE_RATES).forEach(([key, r]) => {
+                if (search && !r.name.toLowerCase().includes(search)) return;
+                tbody.innerHTML += `<tr>
+                    <td style="padding:10px;border:1px solid var(--border)">${r.name}</td>
+                    <td style="padding:10px;border:1px solid var(--border)">${r.unit}</td>
+                    <td style="padding:10px;border:1px solid var(--border);color:#3b82f6">${r.min}</td>
+                    <td style="padding:10px;border:1px solid var(--border);color:#16a34a;font-weight:600">${r.avg}</td>
+                    <td style="padding:10px;border:1px solid var(--border);color:#ef4444">${r.max}</td>
+                    <td style="padding:10px;border:1px solid var(--border)"><button class="btn btn-primary" style="padding:6px 12px;font-size:12px" onclick="addRateToBOQ('${key}')">+ BOQ</button></td>
+                </tr>`;
+            });
+        }
+        
+        function filterRates() { renderRates(); }
+        
+        function addRateToBOQ(key) {
+            const r = UAE_RATES[key];
+            document.getElementById('boqDesc').value = r.name;
+            document.getElementById('boqUnit').value = r.unit;
+            document.getElementById('boqRate').value = r.avg;
+            document.querySelector('.calc-tab:nth-child(2)').click();
+        }
+        
+        // ===== BOQ TABLE =====
+        let boqItems = JSON.parse(localStorage.getItem('boqItems') || '[]');
+        
+        document.getElementById('boqQty').addEventListener('input', updateBoqAmount);
+        document.getElementById('boqRate').addEventListener('input', updateBoqAmount);
+        
+        function updateBoqAmount() {
+            const qty = parseFloat(document.getElementById('boqQty').value) || 0;
+            const rate = parseFloat(document.getElementById('boqRate').value) || 0;
+            document.getElementById('boqAmount').value = (qty * rate).toLocaleString('en-US', {minimumFractionDigits: 2});
+        }
+        
+        function addBOQItem() {
+            const desc = document.getElementById('boqDesc').value;
+            const qty = parseFloat(document.getElementById('boqQty').value);
+            const unit = document.getElementById('boqUnit').value;
+            const rate = parseFloat(document.getElementById('boqRate').value);
+            if (!desc || !qty || !rate) { alert('Please fill all fields'); return; }
+            boqItems.push({ desc, qty, unit, rate, amount: qty * rate });
+            saveBOQ();
+            renderBOQ();
+            document.getElementById('boqDesc').value = '';
+            document.getElementById('boqQty').value = '';
+            document.getElementById('boqRate').value = '';
+            document.getElementById('boqAmount').value = '';
+        }
+        
+        function deleteBOQItem(i) {
+            boqItems.splice(i, 1);
+            saveBOQ();
+            renderBOQ();
+        }
+        
+        function renderBOQ() {
+            const tbody = document.getElementById('boqBody');
+            tbody.innerHTML = '';
+            let subtotal = 0;
+            boqItems.forEach((item, i) => {
+                subtotal += item.amount;
+                tbody.innerHTML += `<tr>
+                    <td style="padding:10px;border:1px solid var(--border)">${i + 1}</td>
+                    <td style="padding:10px;border:1px solid var(--border)">${item.desc}</td>
+                    <td style="padding:10px;border:1px solid var(--border)">${item.qty}</td>
+                    <td style="padding:10px;border:1px solid var(--border)">${item.unit}</td>
+                    <td style="padding:10px;border:1px solid var(--border)">${item.rate.toLocaleString()}</td>
+                    <td style="padding:10px;border:1px solid var(--border)">${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td style="padding:10px;border:1px solid var(--border)"><button onclick="deleteBOQItem(${i})" style="background:var(--accent-red);border:none;color:white;padding:4px 10px;border-radius:4px;cursor:pointer">×</button></td>
+                </tr>`;
+            });
+            document.getElementById('boqSubtotal').textContent = subtotal.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' AED';
+            document.getElementById('boqTotal').textContent = (subtotal * 1.1).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' AED';
+        }
+        
+        function saveBOQ() { localStorage.setItem('boqItems', JSON.stringify(boqItems)); }
+        
+        function clearBOQ() {
+            if (confirm('Clear all BOQ items?')) {
+                boqItems = [];
+                saveBOQ();
+                renderBOQ();
+            }
+        }
+        
+        function exportBOQ() {
+            const name = document.getElementById('boqProjectName').value || 'BOQ';
+            let csv = 'No.,Description,Qty,Unit,Rate,Amount\n';
+            let subtotal = 0;
+            boqItems.forEach((item, i) => {
+                subtotal += item.amount;
+                csv += `${i + 1},"${item.desc}",${item.qty},${item.unit},${item.rate},${item.amount}\n`;
+            });
+            csv += `\n,,,,Subtotal:,${subtotal}\n`;
+            csv += `,,,,+10% Contingency:,${subtotal * 0.1}\n`;
+            csv += `,,,,TOTAL:,${subtotal * 1.1}\n`;
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `BOQ_${name}_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+        }
+        
+        function printBOQ() { window.print(); }
+        
+        // ===== QUICK ESTIMATE =====
+        const QUICK_RATES = {
+            villa: { standard: 1800, good: 2500, premium: 3500 },
+            apartment: { standard: 1500, good: 2100, premium: 3000 },
+            office: { standard: 1400, good: 2000, premium: 2800 },
+            retail: { standard: 1600, good: 2200, premium: 3200 },
+            warehouse: { standard: 800, good: 1100, premium: 1500 }
+        };
+        
+        function quickEstimate() {
+            const type = document.getElementById('quickType').value;
+            const area = parseFloat(document.getElementById('quickArea').value) || 0;
+            const floors = parseFloat(document.getElementById('quickFloors').value) || 1;
+            const quality = document.getElementById('quickQuality').value;
+            if (!area) { alert('Please enter the area'); return; }
+            const totalArea = area * floors;
+            const rate = QUICK_RATES[type][quality];
+            const total = totalArea * rate;
+            document.getElementById('quickResult').style.display = 'block';
+            document.getElementById('quickResultText').innerHTML = `
+                <div style="font-size:14px;margin-bottom:8px">Total Area: <b>${totalArea.toLocaleString()} m²</b></div>
+                <div style="font-size:14px;margin-bottom:8px">Rate: <b>${rate.toLocaleString()} AED/m²</b></div>
+                <div style="font-size:24px;margin-top:12px">💰 <b>${total.toLocaleString()} AED</b></div>
+            `;
+            document.getElementById('quickBreakdown').style.display = 'block';
+            const breakdown = [
+                { name: 'Structure / هيكل', pct: 35 },
+                { name: 'Finishing / تشطيب', pct: 30 },
+                { name: 'MEP / كهرباء وصحي', pct: 20 },
+                { name: 'External / خارجي', pct: 10 },
+                { name: 'Contingency / احتياطي', pct: 5 }
+            ];
+            document.getElementById('quickBreakdownList').innerHTML = breakdown.map(b => `
+                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                    <span>${b.name}</span>
+                    <span style="font-weight:600">${(total * b.pct / 100).toLocaleString()} AED (${b.pct}%)</span>
+                </div>
+            `).join('');
+            window.quickData = { type, area, floors, quality, total, totalArea, rate };
+        }
+        
+        function generateQuickBOQ() {
+            if (!window.quickData) return;
+            const d = window.quickData;
+            boqItems = [
+                { desc: 'Excavation / حفر', qty: d.area * 0.3, unit: 'm³', rate: 35, amount: d.area * 0.3 * 35 },
+                { desc: 'Plain Concrete / خرسانة عادية', qty: d.area * 0.15, unit: 'm³', rate: 420, amount: d.area * 0.15 * 420 },
+                { desc: 'RC Foundations / أساسات مسلحة', qty: d.area * 0.2, unit: 'm³', rate: 600, amount: d.area * 0.2 * 600 },
+                { desc: 'RC Columns / أعمدة', qty: d.totalArea * 0.05, unit: 'm³', rate: 650, amount: d.totalArea * 0.05 * 650 },
+                { desc: 'RC Slabs / بلاطات', qty: d.totalArea * 0.18, unit: 'm³', rate: 620, amount: d.totalArea * 0.18 * 620 },
+                { desc: 'Block Work / بلوك', qty: d.totalArea * 0.8, unit: 'm²', rate: 78, amount: d.totalArea * 0.8 * 78 },
+                { desc: 'Plaster / لياسة', qty: d.totalArea * 1.8, unit: 'm²', rate: 38, amount: d.totalArea * 1.8 * 38 },
+                { desc: 'Tiles / بلاط', qty: d.totalArea * 0.9, unit: 'm²', rate: 115, amount: d.totalArea * 0.9 * 115 },
+                { desc: 'Paint / دهان', qty: d.totalArea * 2.5, unit: 'm²', rate: 17, amount: d.totalArea * 2.5 * 17 },
+                { desc: 'Doors / أبواب', qty: Math.ceil(d.totalArea / 25), unit: 'no.', rate: 1150, amount: Math.ceil(d.totalArea / 25) * 1150 },
+                { desc: 'Windows / نوافذ', qty: d.totalArea * 0.12, unit: 'm²', rate: 425, amount: d.totalArea * 0.12 * 425 },
+                { desc: 'Electrical / كهرباء', qty: Math.ceil(d.totalArea / 5), unit: 'point', rate: 215, amount: Math.ceil(d.totalArea / 5) * 215 },
+                { desc: 'Plumbing / صحي', qty: Math.ceil(d.totalArea / 15), unit: 'point', rate: 300, amount: Math.ceil(d.totalArea / 15) * 300 },
+                { desc: 'AC / تكييف', qty: Math.ceil(d.totalArea / 20), unit: 'ton', rate: 2300, amount: Math.ceil(d.totalArea / 20) * 2300 }
+            ];
+            saveBOQ();
+            document.querySelector('.calc-tab:nth-child(2)').click();
         }
         
         // ===== AI AGENT =====
