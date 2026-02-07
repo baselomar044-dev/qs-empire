@@ -1399,12 +1399,31 @@
         const PASSWORD = '1606';
         const STORAGE_KEY = 'qs_empire_data';
         let currentLang = localStorage.getItem('qs_lang') || 'en';
-        let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-            opportunities: [],
-            projects: [],
-            clients: [],
-            stats: { opps: 0, projects: 0, pending: 0, urgent: 0 }
+        
+        // Load opportunities from database
+        const DB_OPPORTUNITIES = [
+            {"id": 9, "title": "Remote Takeoff Estimator", "platform": "Indeed", "url": "https://www.indeed.com/q-remote-takeoff-estimator-jobs.html", "budget": "$80-100/hr", "description": "Construction Estimator for quantity takeoffs across all divisions. Remote position", "success_rate": 78, "suggested_price": "$80-100/hr", "status": "new", "found_at": "2026-02-07 04:03:24"},
+            {"id": 8, "title": "BOQ Preparation for Interior Projects", "platform": "Truelancer.com", "url": "https://www.truelancer.com/freelance-excel-jobs", "budget": "Variable", "description": "BOQ preparation, material procurement, vendor coordination for interior projects", "success_rate": 72, "suggested_price": "$500-800", "status": "new", "found_at": "2026-02-07 04:03:21"},
+            {"id": 7, "title": "Roofing Takeoff System Development", "platform": "Freelancer.com", "url": "https://www.freelancer.com/projects/construction/roofing-takeoff-system-development", "budget": "£3000-5000 GBP", "description": "Develop takeoff system for roofing company with material lists and cost estimations", "success_rate": 55, "suggested_price": "£3500 GBP", "status": "new", "found_at": "2026-02-07 04:03:17"},
+            {"id": 6, "title": "Landscape Irrigation Materials Takeoff Specialist", "platform": "Upwork", "url": "https://www.upwork.com/freelance-jobs/apply/Landscape-Irrigation-Takeoff", "budget": "Variable", "description": "Perform comprehensive materials takeoff from landscape irrigation plans", "success_rate": 62, "suggested_price": "$40-60", "status": "new", "found_at": "2026-02-07 04:03:13"},
+            {"id": 5, "title": "Chartered QS with Content Writing Expertise for BIM Article Series", "platform": "Upwork", "url": "https://www.upwork.com/freelance-jobs/apply/Chartered-QS-BIM-Articles", "budget": "Hourly (Less than 30 hrs/week, 1-3 months)", "description": "Chartered QS needed for BIM Article Series content writing", "success_rate": 65, "suggested_price": "$25-35/hr", "status": "new", "found_at": "2026-02-07 04:03:11"},
+            {"id": 1, "title": "Interior Drawings & Quantity Survey", "platform": "Freelancer.com", "url": "https://www.freelancer.com/projects/interior-design/interior-drawings-quantity-survey", "budget": "$250-750 USD", "description": "Shop drawings in DWG/PDF for Furniture Layout, Electrical & Plumbing. Quantity Survey workbook in Excel with open formulas. Monthly BOQ reconciliation extracts. Location: Jakarta, Indonesia.", "success_rate": 68, "suggested_price": "$400-500", "status": "new", "found_at": "2026-02-06 18:16:56"},
+            {"id": 2, "title": "Quantity Takeoff & Cost Estimate", "platform": "Upwork", "url": "https://www.upwork.com/freelance-jobs/apply/Quantity-Takeoff-Cost-Estimate_~022018972511520709882/", "budget": "$50 Fixed", "description": "Quantity Takeoff and Cost Estimation project. Posted Feb 4, 2026.", "success_rate": 72, "suggested_price": "$50-80", "status": "new", "found_at": "2026-02-06 18:16:56"},
+            {"id": 3, "title": "Civil Engineer - Construction Cost Estimation", "platform": "Upwork", "url": "https://www.upwork.com/freelance-jobs/apply/Civil-Engineer-Needed-for-Construction-Project-Cost-Estimation_~022018026730730479448/", "budget": "$15/hr (30 hrs/week, 1-3 months)", "description": "Civil Engineer needed for construction project cost estimation. Intermediate level. Less than 30 hrs/week.", "success_rate": 78, "suggested_price": "$15-20/hr", "status": "new", "found_at": "2026-02-06 18:16:56"},
+            {"id": 4, "title": "Remote Estimator - Construction & Property Services", "platform": "Upwork", "url": "https://www.upwork.com/freelance-jobs/apply/Remote-Estimator-for-Construction-Property-Services_~022018715257415783260/", "budget": "Not specified", "description": "Remote estimator for construction and property services company in Charlotte. Residential and commercial projects.", "success_rate": 70, "suggested_price": "$300-600", "status": "new", "found_at": "2026-02-06 18:16:56"}
+        ];
+        
+        // ALWAYS load opportunities from database, never from localStorage
+        const cachedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        let appData = {
+            opportunities: DB_OPPORTUNITIES,  // Always load fresh from DB
+            projects: cachedData.projects || [],
+            clients: cachedData.clients || [],
+            stats: cachedData.stats || { opps: 0, projects: 0, pending: 0, urgent: 0 }
         };
+        
+        // Save to localStorage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
         
         // ===== AUTH =====
         function checkAuth() {
@@ -1475,16 +1494,10 @@
         }
         
         async function loadData() {
-            // Load opportunities from API
-            try {
-                const res = await fetch('/api/opportunities');
-                const data = await res.json();
-                if (data.success && data.opportunities) {
-                    appData.opportunities = data.opportunities;
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                }
-            } catch (e) {
-                console.log('API not available, using cached data');
+            // Ensure opportunities are loaded from database
+            if (!appData.opportunities || appData.opportunities.length === 0) {
+                appData.opportunities = DB_OPPORTUNITIES;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             }
             updateStats();
             renderOpportunities();
@@ -1524,25 +1537,59 @@
         }
         
         function renderOppItem(opp) {
-            const successClass = opp.successRate >= 70 ? 'high' : opp.successRate >= 40 ? 'medium' : 'low';
+            const successClass = opp.success_rate >= 70 ? 'high' : opp.success_rate >= 40 ? 'medium' : 'low';
+            const date = new Date(opp.found_at);
+            const formattedDate = date.toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+            
             return `
                 <div class="opp-item">
                     <div class="opp-header">
-                        <div class="opp-title"><a href="${opp.url}" target="_blank">${opp.title}</a></div>
-                        <span class="opp-platform ${opp.platform.toLowerCase()}">${opp.platform}</span>
+                        <div class="opp-title">
+                            <a href="${opp.url}" target="_blank" style="color: #00d4ff; text-decoration: none; font-weight: 600;">
+                                🔗 ${opp.title}
+                            </a>
+                        </div>
+                        <span class="opp-platform" style="background: #1a4d6d; padding: 4px 12px; border-radius: 4px; font-size: 12px;">
+                            🌐 ${opp.platform}
+                        </span>
                     </div>
-                    <div class="opp-meta">
-                        <span>💰 ${opp.budget}</span>
-                        <span>📍 ${opp.location || 'Remote'}</span>
-                        <span>⏰ ${opp.posted}</span>
+                    
+                    <div class="opp-summary" style="background: #0a0f1a; padding: 12px; border-radius: 6px; margin: 12px 0; border-left: 3px solid #00d4ff; font-size: 13px; line-height: 1.6; color: #b0b8c1;">
+                        ${opp.description || 'No description available'}
                     </div>
-                    <div class="opp-success">
-                        <div class="success-bar"><div class="success-fill ${successClass}" style="width:${opp.successRate}%"></div></div>
-                        <div class="success-text">${opp.successRate}%</div>
+                    
+                    <div class="opp-meta" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+                        <div style="background: #0f1419; padding: 8px; border-radius: 4px; border-left: 2px solid #1ade00;">
+                            <div style="font-size: 11px; color: #7a8794;">💰 ${currentLang === 'ar' ? 'الميزانية' : 'Budget'}</div>
+                            <div style="font-weight: 600; color: #fff;">${opp.budget}</div>
+                        </div>
+                        <div style="background: #0f1419; padding: 8px; border-radius: 4px; border-left: 2px solid #ffaa00;">
+                            <div style="font-size: 11px; color: #7a8794;">💵 ${currentLang === 'ar' ? 'السعر المقترح' : 'Suggested'}</div>
+                            <div style="font-weight: 600; color: #fff;">${opp.suggested_price || 'N/A'}</div>
+                        </div>
                     </div>
-                    <div class="opp-actions">
-                        <button class="opp-btn primary" onclick="showProposal('${opp.id}')" data-en="View Proposal" data-ar="عرض العرض">${currentLang === 'ar' ? 'عرض العرض' : 'View Proposal'}</button>
-                        <a href="${opp.url}" target="_blank" class="opp-btn secondary" data-en="Apply Now" data-ar="قدم الآن">${currentLang === 'ar' ? 'قدم الآن' : 'Apply Now'}</a>
+                    
+                    <div class="opp-success" style="margin: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-size: 12px; color: #7a8794;">${currentLang === 'ar' ? 'فرصة النجاح' : 'Success Rate'}</span>
+                            <span style="font-weight: 600; color: #fff;">${opp.success_rate}%</span>
+                        </div>
+                        <div class="success-bar" style="background: #0a1419; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div class="success-fill ${successClass}" style="width:${opp.success_rate}%; height: 100%; background: ${successClass === 'high' ? '#1ade00' : successClass === 'medium' ? '#ffaa00' : '#ff3333'}; transition: width 0.3s;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="opp-date" style="font-size: 11px; color: #5a6370; margin: 8px 0;">
+                        📅 ${formattedDate}
+                    </div>
+                    
+                    <div class="opp-actions" style="display: flex; gap: 8px; margin-top: 12px;">
+                        <button class="opp-btn primary" onclick="showProposal('${opp.id}')" style="flex: 1; padding: 8px; background: #003d5c; border: 1px solid #00d4ff; color: #00d4ff; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                            ${currentLang === 'ar' ? '📋 عرض العرض' : '📋 View Proposal'}
+                        </button>
+                        <a href="${opp.url}" target="_blank" class="opp-btn secondary" style="flex: 1; padding: 8px; background: #1a4d2e; border: 1px solid #1ade00; color: #1ade00; border-radius: 4px; text-decoration: none; text-align: center; font-weight: 600;">
+                            ${currentLang === 'ar' ? '🚀 قدم الآن' : '🚀 Apply Now'}
+                        </a>
                     </div>
                 </div>
             `;
