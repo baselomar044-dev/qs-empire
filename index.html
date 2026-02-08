@@ -1494,11 +1494,23 @@
         }
         
         async function loadData() {
-            // Ensure opportunities are loaded from database
-            if (!appData.opportunities || appData.opportunities.length === 0) {
+            try {
+                // Fetch LIVE opportunities from API (real database)
+                const response = await fetch('/api/opportunities');
+                if (response.ok) {
+                    const data = await response.json();
+                    appData.opportunities = data.opportunities || [];
+                } else {
+                    // Fallback to hardcoded if API fails
+                    appData.opportunities = DB_OPPORTUNITIES;
+                }
+            } catch (error) {
+                console.error('Failed to fetch opportunities from API:', error);
+                // Fallback to hardcoded
                 appData.opportunities = DB_OPPORTUNITIES;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             }
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             updateStats();
             renderOpportunities();
             renderProjects();
